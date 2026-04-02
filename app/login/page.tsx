@@ -1,50 +1,66 @@
-import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
+import Container from "@/components/ui/Container";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
+import { Card, CardContent } from "@/components/ui/Card";
+import PageHeader from "@/components/PageHeader";
 
 export default function LoginPage() {
   return (
-    <main className="mx-auto max-w-md px-6 py-10">
-      <PageHeader
-        title="Login"
-        description="Sign in to access your budget dashboard."
-      />
-
-      <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <div className="space-y-5">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none placeholder:text-slate-400 focus:border-slate-500"
-            />
+    <main className="py-12 sm:py-16">
+      <Container className="max-w-5xl">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+          <div className="hidden lg:block">
+            <p className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+              Welcome back
+            </p>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900">
+              Continue tracking your financial progress
+            </h1>
+            <p className="mt-4 max-w-lg text-base leading-7 text-slate-600">
+              Log in to view your dashboard, manage expenses, track savings, and
+              chat with your AI budgeting assistant.
+            </p>
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none placeholder:text-slate-400 focus:border-slate-500"
-            />
-          </div>
+          <Card className="mx-auto w-full max-w-md">
+            <CardContent className="p-8">
+              <PageHeader
+                title="Login"
+                description="Sign in to access your budget dashboard."
+              />
 
-          <button className="w-full rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700">
-            Login
-          </button>
+              <form className="space-y-5">
+                <Input
+                  label="Email"
+                  type="email"
+                  placeholder="you@example.com"
+                />
 
-          <p className="text-sm text-slate-600">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-slate-900 underline">
-              Register
-            </Link>
-          </p>
+                <Input
+                  label="Password"
+                  type="password"
+                  placeholder="••••••••"
+                />
+
+                <Button className="w-full" size="lg">
+                  Login
+                </Button>
+              </form>
+
+              <p className="mt-6 text-sm text-slate-600">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold text-slate-900 underline underline-offset-4"
+                >
+                  Register
+                </Link>
+              </p>
+            </CardContent>
+          </Card>
         </div>
-      </section>
+      </Container>
     </main>
   );
 }
