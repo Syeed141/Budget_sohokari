@@ -29,14 +29,14 @@ export default function HomePage() {
         <Container className="py-20 sm:py-24">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
-              <Badge>Built for early-career workers in Dhaka</Badge>
+              <Badge>Built for early-career workers</Badge>
 
               <h1 className="mt-6 max-w-3xl text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
                 A smarter way to survive and plan your month on a starting salary
               </h1>
 
               <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-                BudgetMate Dhaka helps fresh graduates track expenses, understand
+                Budget Sohokari helps fresh graduates track expenses, understand
                 monthly financial health, plan daily spending, and get AI-powered
                 guidance based on their real income and spending habits.
               </p>
