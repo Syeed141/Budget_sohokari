@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Container from "@/components/ui/Container";
-import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import PageHeader from "@/components/PageHeader";
+import RegisterForm from "@/components/auth/RegisterForm";
 
 export default function RegisterPage() {
   return (
@@ -30,30 +29,7 @@ export default function RegisterPage() {
                 description="Create an account to start tracking your money."
               />
 
-              <form className="space-y-5">
-                <Input
-                  label="Full Name"
-                  type="text"
-                  placeholder="Your full name"
-                />
-
-                <Input
-                  label="Email"
-                  type="email"
-                  placeholder="you@example.com"
-                />
-
-                <Input
-                  label="Password"
-                  type="password"
-                  placeholder="••••••••"
-                  helperText="Use at least 8 characters later when we add validation."
-                />
-
-                <Button className="w-full" size="lg">
-                  Create Account
-                </Button>
-              </form>
+              <RegisterForm />
 
               <p className="mt-6 text-sm text-slate-600">
                 Already have an account?{" "}

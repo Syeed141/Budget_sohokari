@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Container from "@/components/ui/Container";
-import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import PageHeader from "@/components/PageHeader";
+import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
@@ -30,23 +29,7 @@ export default function LoginPage() {
                 description="Sign in to access your budget dashboard."
               />
 
-              <form className="space-y-5">
-                <Input
-                  label="Email"
-                  type="email"
-                  placeholder="you@example.com"
-                />
-
-                <Input
-                  label="Password"
-                  type="password"
-                  placeholder="••••••••"
-                />
-
-                <Button className="w-full" size="lg">
-                  Login
-                </Button>
-              </form>
+              <LoginForm />
 
               <p className="mt-6 text-sm text-slate-600">
                 Don&apos;t have an account?{" "}
