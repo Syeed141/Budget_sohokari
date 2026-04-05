@@ -19,7 +19,7 @@ export default async function Navbar() {
       <Container className="flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="text-lg font-bold tracking-tight text-slate-900">
-            BudgetMate Dhaka
+            Budget Sohokari
           </Link>
 
           {session ? (

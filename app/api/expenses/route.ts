@@ -1,25 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/components/lib/db";
 import Expense from "@/components/models/Expense";
+import { getSessionFromCookies } from "@/components/lib/auth";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    await connectToDatabase();
+    const session = await getSessionFromCookies();
 
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
+    if (!session) {
       return NextResponse.json(
         {
           success: false,
-          message: "userId is required",
+          message: "Not authenticated",
         },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
-    const expenses = await Expense.find({ userId }).sort({
+    await connectToDatabase();
+
+    const expenses = await Expense.find({ userId: session.userId }).sort({
       date: -1,
       createdAt: -1,
     });
@@ -43,29 +43,53 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
+    const session = await getSessionFromCookies();
 
-    const body = await request.json();
-    const { userId, title, amount, category, note, date, isFixed } = body;
-
-    if (!userId || !title || amount === undefined || !category || !date) {
+    if (!session) {
       return NextResponse.json(
         {
           success: false,
-          message: "userId, title, amount, category, and date are required",
+          message: "Not authenticated",
+        },
+        { status: 401 }
+      );
+    }
+
+    await connectToDatabase();
+
+    const body = await request.json();
+    const { title, amount, category, note, date, isFixed } = body;
+
+    if (!title || amount === undefined || !category || !date) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Title, amount, category, and date are required",
+        },
+        { status: 400 }
+      );
+    }
+
+    const parsedAmount = Number(amount);
+
+    if (Number.isNaN(parsedAmount) || parsedAmount < 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Amount must be a valid non-negative number",
         },
         { status: 400 }
       );
     }
 
     const expense = await Expense.create({
-      userId,
-      title,
-      amount,
-      category,
-      note,
+      userId: session.userId,
+      title: title.trim(),
+      amount: parsedAmount,
+      category: category.trim(),
+      note: note?.trim() || "",
       date,
-      isFixed,
+      isFixed: Boolean(isFixed),
     });
 
     return NextResponse.json(
