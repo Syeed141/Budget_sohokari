@@ -37,6 +37,12 @@ export type CategoryTotal = {
   amount: number;
 };
 
+export type MonthlyInsight = {
+  label: string;
+  value: string;
+  helperText?: string;
+};
+
 export type MonthlyExpenseAnalytics = {
   month: number;
   year: number;
@@ -44,4 +50,5 @@ export type MonthlyExpenseAnalytics = {
   categoryTotals: CategoryTotal[];
   chartData: MonthlyChartRow[];
   dailyGroups: DailyExpenseGroup[];
+  insights: MonthlyInsight[];
 };

@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import {Card} from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
 import MonthlyExpensesChart from "@/components/expenses/MonthlyExpensesChart";
 import MonthlyDailyBreakdown from "@/components/expenses/MonthlyDailyBreakdown";
 import MonthlyExpenseSummary from "@/components/expenses/MonthlyExpenseSummary";
+import MonthlyExpensesPdfDownloadButton from "@/components/expenses/MonthlyExpensesPdfDownloadButton";
+import MonthlyInsights from "@/components/expenses/MonthlyInsights";
 import type { MonthlyExpenseAnalytics } from "@/types/expense";
 
 export default function MonthlyExpensesAnalytics() {
@@ -82,7 +83,7 @@ export default function MonthlyExpensesAnalytics() {
               Monthly Expense Analytics
             </h2>
             <p className="text-sm text-slate-500">
-              Review day-by-day spending patterns for a full month.
+              Review day-by-day spending patterns and budgeting signals for a full month.
             </p>
           </div>
 
@@ -94,7 +95,7 @@ export default function MonthlyExpensesAnalytics() {
               <select
                 value={month}
                 onChange={(e) => setMonth(Number(e.target.value))}
-                className="min-w-42.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300"
+                className="min-w-[170px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300"
               >
                 {monthOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -138,14 +139,14 @@ export default function MonthlyExpensesAnalytics() {
             categoryTotals={data.categoryTotals}
           />
 
+          <MonthlyInsights insights={data.insights} />
+
           <MonthlyExpensesChart data={data.chartData} />
 
           <MonthlyDailyBreakdown groups={data.dailyGroups} />
 
           <div className="flex justify-end">
-            <Button disabled>
-              Download PDF (next milestone)
-            </Button>
+            <MonthlyExpensesPdfDownloadButton data={data} />
           </div>
         </>
       ) : null}

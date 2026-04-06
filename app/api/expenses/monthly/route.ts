@@ -55,6 +55,14 @@ function getLocalDateKey(value: Date) {
   return `${year}-${month}-${day}`;
 }
 
+function formatBDT(amount: number) {
+  return new Intl.NumberFormat("en-BD", {
+    style: "currency",
+    currency: "BDT",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
@@ -175,6 +183,42 @@ export async function GET(req: NextRequest) {
       0
     );
 
+    const topCategory = categoryTotals[0];
+    const spendingDays = dailyGroups.length;
+    const noSpendDays = daysInMonth - spendingDays;
+
+    const highestSpendingDay = [...dailyGroups].sort((a, b) => b.total - a.total)[0];
+    const averageDailySpend =
+      spendingDays > 0 ? totalMonthlyExpense / spendingDays : 0;
+
+    const insights = [
+      {
+        label: "Top Category",
+        value: topCategory ? topCategory.category : "No data",
+        helperText: topCategory ? formatBDT(topCategory.amount) : "No expenses yet",
+      },
+      {
+        label: "Highest Spending Day",
+        value: highestSpendingDay ? `Day ${highestSpendingDay.day}` : "No data",
+        helperText: highestSpendingDay
+          ? formatBDT(highestSpendingDay.total)
+          : "No expenses yet",
+      },
+      {
+        label: "Average Spending Day",
+        value: formatBDT(averageDailySpend),
+        helperText:
+          spendingDays > 0
+            ? `Across ${spendingDays} spending day${spendingDays > 1 ? "s" : ""}`
+            : "No spending days yet",
+      },
+      {
+        label: "No-Spend Days",
+        value: String(noSpendDays),
+        helperText: `Out of ${daysInMonth} day${daysInMonth > 1 ? "s" : ""}`,
+      },
+    ];
+
     return NextResponse.json({
       success: true,
       data: {
@@ -184,6 +228,7 @@ export async function GET(req: NextRequest) {
         categoryTotals,
         chartData,
         dailyGroups,
+        insights,
       },
     });
   } catch (error) {
