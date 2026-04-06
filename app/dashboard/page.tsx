@@ -29,31 +29,31 @@ export default async function DashboardPage() {
       <Container>
         <PageHeader
           badgeText="Monthly overview"
-          title={`Welcome back, ${user.name}`}
+          title={`Welcome back, ${user.name} !`}
           description="Track your real monthly spending, remaining balance, savings progress, and category-wise trends."
         />
 
         <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <SummaryCard
-            label="Monthly Income"
+            label="Your Monthly Income"
             value={`৳ ${totals.monthlyIncome}`}
-            hint="From your profile settings"
+            // hint="From your profile settings"
           />
           <SummaryCard
             label="This Month's Expenses"
             value={`৳ ${totals.monthlyExpenses}`}
-            hint="Calculated from current month expense records"
+            // hint="Calculated from current month expense records"
           />
           <SummaryCard
-            label="Remaining Balance"
+            label="Current Month's remaining Balance"
             value={`৳ ${totals.remainingBalance}`}
-            hint="Income minus this month's spending"
+            // hint="Income minus this month's spending"
             emphasis={totals.remainingBalance < 0 ? "negative" : "default"}
           />
           <SummaryCard
             label="Safe Daily Spend"
             value={`৳ ${totals.safeDailySpend}`}
-            hint="Estimated for the remaining days of this month"
+            // hint="Estimated for the remaining days of this month"
             emphasis="positive"
           />
         </section>

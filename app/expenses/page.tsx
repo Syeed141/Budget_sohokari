@@ -1,19 +1,20 @@
 import Container from "@/components/ui/Container";
 import PageHeader from "@/components/PageHeader";
 import ExpenseManager from "@/components/expenses/ExpenseManager";
+import MonthlyExpensesAnalytics from "@/components/expenses/MonthlyExpensesAnalytics";
 
 export default function ExpensesPage() {
   return (
-    <main className="py-10">
-      <Container>
-        <PageHeader
-          badgeText="Expense management"
-          title="Expenses"
-          description="Track daily spending and fixed monthly costs in one clean view."
-        />
+    <Container className="py-10">
+      <PageHeader
+        title="Expenses"
+        subtitle="Track spending, review patterns, and understand your monthly expense behavior."
+      />
 
+      <div className="mt-8 space-y-8">
+        <MonthlyExpensesAnalytics />
         <ExpenseManager />
-      </Container>
-    </main>
+      </div>
+    </Container>
   );
 }
