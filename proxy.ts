@@ -11,7 +11,7 @@ const secretKey = new TextEncoder().encode(JWT_SECRET);
 
 const protectedRoutes = ["/dashboard", "/expenses", "/profile", "/ai"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isProtectedRoute = protectedRoutes.some((route) =>

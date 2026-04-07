@@ -8,7 +8,7 @@ export default function ExpensesPage() {
     <Container className="py-10">
       <PageHeader
         title="Expenses"
-        subtitle="Track spending, review patterns, and understand your monthly expense behavior."
+        description="Track spending, review patterns, and understand your monthly expense behavior."
       />
 
       <div className="mt-8 space-y-8">

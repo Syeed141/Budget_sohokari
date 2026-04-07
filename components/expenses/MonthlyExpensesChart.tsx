@@ -23,6 +23,7 @@ const CATEGORY_CONFIG = [
   { key: "Food", color: "#0f172a" },
   { key: "Transport", color: "#334155" },
   { key: "Rent", color: "#475569" },
+  { key: "Internet", color: "#5b6b80" },
   { key: "Bills", color: "#64748b" },
   { key: "Shopping", color: "#94a3b8" },
   { key: "Health", color: "#cbd5e1" },

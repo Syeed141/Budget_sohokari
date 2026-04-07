@@ -2,6 +2,7 @@ export type ExpenseCategory =
   | "Food"
   | "Transport"
   | "Rent"
+  | "Internet"
   | "Bills"
   | "Shopping"
   | "Health"

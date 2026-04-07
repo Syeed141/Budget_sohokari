@@ -12,6 +12,7 @@ const DEFAULT_CATEGORIES = [
   "Food",
   "Transport",
   "Rent",
+  "Internet",
   "Bills",
   "Shopping",
   "Health",
@@ -39,6 +40,33 @@ function getDaysInMonth(year: number, month: number) {
 
 function padDay(day: number) {
   return String(day).padStart(2, "0");
+}
+
+function normalizeCategory(category?: string) {
+  if (!category) return "Other";
+
+  const map: Record<string, string> = {
+    food: "Food",
+    transport: "Transport",
+    rent: "Rent",
+    internet: "Internet",
+    bills: "Bills",
+    shopping: "Shopping",
+    health: "Health",
+    education: "Education",
+    entertainment: "Entertainment",
+    other: "Other",
+  };
+
+  return map[category.toLowerCase()] || "Other";
+}
+
+function formatBDT(amount: number) {
+  return new Intl.NumberFormat("en-BD", {
+    style: "currency",
+    currency: "BDT",
+    maximumFractionDigits: 0,
+  }).format(amount);
 }
 
 export async function getMonthlyExpenseAnalytics({
@@ -88,7 +116,7 @@ export async function getMonthlyExpenseAnalytics({
   for (const expense of rawExpenses) {
     const expenseDate = new Date(expense.date);
     const dayOfMonth = expenseDate.getDate();
-    const category = expense.category || "Other";
+    const category = normalizeCategory(expense.category);
     const amount = Number(expense.amount) || 0;
 
     if (chartRowsMap[dayOfMonth][category] === undefined) {
@@ -145,6 +173,41 @@ export async function getMonthlyExpenseAnalytics({
     0
   );
 
+  const topCategory = categoryTotals[0];
+  const spendingDays = dailyGroups.length;
+  const noSpendDays = daysInMonth - spendingDays;
+  const highestSpendingDay = [...dailyGroups].sort((a, b) => b.total - a.total)[0];
+  const averageDailySpend =
+    spendingDays > 0 ? totalMonthlyExpense / spendingDays : 0;
+
+  const insights = [
+    {
+      label: "Top Category",
+      value: topCategory ? topCategory.category : "No data",
+      helperText: topCategory ? formatBDT(topCategory.amount) : "No expenses yet",
+    },
+    {
+      label: "Highest Spending Day",
+      value: highestSpendingDay ? `Day ${highestSpendingDay.day}` : "No data",
+      helperText: highestSpendingDay
+        ? formatBDT(highestSpendingDay.total)
+        : "No expenses yet",
+    },
+    {
+      label: "Average Spending Day",
+      value: formatBDT(averageDailySpend),
+      helperText:
+        spendingDays > 0
+          ? `Across ${spendingDays} spending day${spendingDays > 1 ? "s" : ""}`
+          : "No spending days yet",
+    },
+    {
+      label: "No-Spend Days",
+      value: String(noSpendDays),
+      helperText: `Out of ${daysInMonth} day${daysInMonth > 1 ? "s" : ""}`,
+    },
+  ];
+
   return {
     month,
     year,
@@ -152,5 +215,6 @@ export async function getMonthlyExpenseAnalytics({
     categoryTotals,
     chartData,
     dailyGroups,
+    insights,
   };
 }

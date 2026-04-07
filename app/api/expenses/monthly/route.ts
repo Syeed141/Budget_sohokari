@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/components/lib/db";
 import Expense from "@/components/models/Expense";
 import { getSessionFromCookies } from "@/components/lib/auth";
+import type { ExpenseItemDTO } from "@/types/expense";
 
 const DEFAULT_CATEGORIES = [
   "Food",
   "Transport",
   "Rent",
+  "Internet",
   "Bills",
   "Shopping",
   "Health",
@@ -37,6 +39,7 @@ function normalizeCategory(category?: string) {
     food: "Food",
     transport: "Transport",
     rent: "Rent",
+    internet: "Internet",
     bills: "Bills",
     shopping: "Shopping",
     health: "Health",
@@ -112,7 +115,7 @@ export async function GET(req: NextRequest) {
     const daysInMonth = getDaysInMonth(year, month);
 
     const chartRowsMap: Record<number, Record<string, string | number>> = {};
-    const groupedExpensesMap: Record<string, any[]> = {};
+    const groupedExpensesMap: Record<string, ExpenseItemDTO[]> = {};
     const categoryTotalsMap: Record<string, number> = {};
 
     for (let day = 1; day <= daysInMonth; day++) {
