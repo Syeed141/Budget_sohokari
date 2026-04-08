@@ -1,24 +1,48 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import {Card} from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import MonthlyExpensesChart from "@/components/expenses/MonthlyExpensesChart";
 import MonthlyDailyBreakdown from "@/components/expenses/MonthlyDailyBreakdown";
 import MonthlyExpenseSummary from "@/components/expenses/MonthlyExpenseSummary";
-import MonthlyExpensesPdfDownloadButton from "@/components/expenses/MonthlyExpensesPdfDownloadButton";
 import MonthlyInsights from "@/components/expenses/MonthlyInsights";
 import type { MonthlyExpenseAnalytics } from "@/types/expense";
 
-export default function MonthlyExpensesAnalytics() {
-  const now = new Date();
+const MonthlyExpensesPdfDownloadButton = dynamic(
+  () => import("@/components/expenses/MonthlyExpensesPdfDownloadButton"),
+  {
+    ssr: false,
+  }
+);
 
-  const [month, setMonth] = useState(now.getMonth() + 1);
-  const [year, setYear] = useState(now.getFullYear());
-  const [data, setData] = useState<MonthlyExpenseAnalytics | null>(null);
-  const [loading, setLoading] = useState(true);
+type MonthlyExpensesAnalyticsProps = {
+  initialData?: MonthlyExpenseAnalytics | null;
+  isDemo?: boolean;
+};
+
+export default function MonthlyExpensesAnalytics({
+  initialData = null,
+  isDemo = false,
+}: MonthlyExpensesAnalyticsProps) {
+  const now = new Date();
+  const initialMonth = initialData?.month ?? now.getMonth() + 1;
+  const initialYear = initialData?.year ?? now.getFullYear();
+
+  const [month, setMonth] = useState(initialMonth);
+  const [year, setYear] = useState(initialYear);
+  const [data, setData] = useState<MonthlyExpenseAnalytics | null>(initialData);
+  const [loading, setLoading] = useState(!initialData && !isDemo);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (isDemo) {
+      setData(initialData);
+      setLoading(false);
+      setError("");
+      return;
+    }
+
     let isMounted = true;
 
     async function fetchMonthlyAnalytics() {
@@ -65,7 +89,7 @@ export default function MonthlyExpensesAnalytics() {
     return () => {
       isMounted = false;
     };
-  }, [month, year]);
+  }, [initialData, isDemo, month, year]);
 
   const monthOptions = Array.from({ length: 12 }, (_, index) => ({
     value: index + 1,
@@ -85,6 +109,11 @@ export default function MonthlyExpensesAnalytics() {
             <p className="text-sm text-slate-500">
               Review day-by-day spending patterns and budgeting signals for a full month.
             </p>
+            {isDemo ? (
+              <p className="mt-2 text-sm text-emerald-700">
+                Demo analytics are shown for a sample month. Sign in to inspect your own data.
+              </p>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -95,7 +124,8 @@ export default function MonthlyExpensesAnalytics() {
               <select
                 value={month}
                 onChange={(e) => setMonth(Number(e.target.value))}
-                className="min-w-[170px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300"
+                disabled={isDemo}
+                className="min-w-[170px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300 disabled:cursor-not-allowed disabled:bg-slate-50"
               >
                 {monthOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -113,7 +143,8 @@ export default function MonthlyExpensesAnalytics() {
                 type="number"
                 value={year}
                 onChange={(e) => setYear(Number(e.target.value))}
-                className="min-w-[130px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300"
+                disabled={isDemo}
+                className="min-w-[130px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300 disabled:cursor-not-allowed disabled:bg-slate-50"
               />
             </div>
           </div>
@@ -145,7 +176,12 @@ export default function MonthlyExpensesAnalytics() {
 
           <MonthlyDailyBreakdown groups={data.dailyGroups} />
 
-          <div className="flex justify-end">
+          <div className="flex flex-col items-end gap-2">
+            {isDemo ? (
+              <p className="text-sm text-slate-500">
+                Download the sample PDF report from this preview.
+              </p>
+            ) : null}
             <MonthlyExpensesPdfDownloadButton data={data} />
           </div>
         </>

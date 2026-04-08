@@ -20,16 +20,16 @@ type Props = {
 };
 
 const CATEGORY_CONFIG = [
-  { key: "Food", color: "#0f172a" },
-  { key: "Transport", color: "#334155" },
-  { key: "Rent", color: "#475569" },
-  { key: "Internet", color: "#5b6b80" },
-  { key: "Bills", color: "#64748b" },
-  { key: "Shopping", color: "#94a3b8" },
-  { key: "Health", color: "#cbd5e1" },
-  { key: "Education", color: "#a8b4c7" },
-  { key: "Entertainment", color: "#7c8ba1" },
-  { key: "Other", color: "#dbe4ee" },
+  { key: "Food", color: "#ef4444" },
+  { key: "Transport", color: "#f59e0b" },
+  { key: "Rent", color: "#8b5cf6" },
+  { key: "Internet", color: "#06b6d4" },
+  { key: "Bills", color: "#3b82f6" },
+  { key: "Shopping", color: "#ec4899" },
+  { key: "Health", color: "#22c55e" },
+  { key: "Education", color: "#14b8a6" },
+  { key: "Entertainment", color: "#a855f7" },
+  { key: "Other", color: "#64748b" },
 ];
 
 type FilterValue = "All" | (typeof CATEGORY_CONFIG)[number]["key"];
@@ -162,3 +162,4 @@ export default function MonthlyExpensesChart({ data }: Props) {
     </Card>
   );
 }
+

@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
+
 import dns from "node:dns";
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
-
 
 // Temporary workaround for SRV DNS lookup issues
 
@@ -48,3 +48,4 @@ export async function connectToDatabase() {
 
   return cached.conn;
 }
+

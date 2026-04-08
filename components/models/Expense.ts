@@ -23,6 +23,12 @@ const ExpenseSchema = new Schema<IExpense>(
       type: String,
       required: true,
       trim: true,
+      minlength: 2,
+      maxlength: 80,
+      validate: {
+        validator: (value: string) => /^[\p{L}\s]+$/u.test(value),
+        message: "Title must contain letters only",
+      },
     },
     amount: {
       type: Number,
@@ -33,11 +39,24 @@ const ExpenseSchema = new Schema<IExpense>(
       type: String,
       required: true,
       trim: true,
+      enum: [
+        "Food",
+        "Transport",
+        "Rent",
+        "Internet",
+        "Bills",
+        "Shopping",
+        "Health",
+        "Education",
+        "Entertainment",
+        "Other",
+      ],
     },
     note: {
       type: String,
       default: "",
       trim: true,
+      maxlength: 300,
     },
     date: {
       type: Date,

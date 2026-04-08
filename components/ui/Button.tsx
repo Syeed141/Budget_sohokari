@@ -24,12 +24,12 @@ type ButtonProps = ButtonAsButton | ButtonAsLink;
 function getVariantClasses(variant: ButtonVariant) {
   switch (variant) {
     case "secondary":
-      return "bg-white text-slate-900 border border-slate-300 hover:bg-slate-100";
+      return "border border-[#408A71] bg-[#B0E4CC] text-[#091413] hover:bg-[#9edac0]";
     case "ghost":
-      return "bg-transparent text-slate-700 hover:bg-slate-100";
+      return "bg-transparent text-[#285A48] hover:bg-[#B0E4CC]";
     case "primary":
     default:
-      return "bg-slate-900 text-white hover:bg-slate-800";
+      return "bg-[#285A48] text-[#B0E4CC] hover:bg-[#1f483a]";
   }
 }
 
@@ -55,8 +55,8 @@ export default function Button(props: ButtonProps) {
 
   const classes = `
     inline-flex items-center justify-center rounded-xl font-semibold
-    transition-all duration-200
-    focus:outline-none focus:ring-2 focus:ring-slate-300
+    transition-all duration-200 shadow-sm
+    focus:outline-none focus:ring-2 focus:ring-[#408A71]/45
     disabled:cursor-not-allowed disabled:opacity-60
     ${getVariantClasses(variant)}
     ${getSizeClasses(size)}
@@ -77,3 +77,4 @@ export default function Button(props: ButtonProps) {
     </button>
   );
 }
+

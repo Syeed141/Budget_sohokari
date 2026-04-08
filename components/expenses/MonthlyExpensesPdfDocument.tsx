@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
+    borderBottomColor: "#B0E4CC",
     borderBottomStyle: "solid",
   },
   brand: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     width: "48%",
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: "#B0E4CC",
     borderStyle: "solid",
     borderRadius: 8,
     padding: 10,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: "#d9f1e4",
     borderBottomStyle: "solid",
     paddingVertical: 6,
   },
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   insightCard: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: "#B0E4CC",
     borderStyle: "solid",
     borderRadius: 8,
     padding: 10,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   dailyGroup: {
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: "#B0E4CC",
     borderStyle: "solid",
     borderRadius: 8,
     padding: 10,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: "#f8fafc",
+    borderBottomColor: "#ecf8f1",
     borderBottomStyle: "solid",
   },
   expenseLeft: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: "#e2e8f0",
+    borderTopColor: "#B0E4CC",
     borderTopStyle: "solid",
     fontSize: 9,
     color: "#64748b",
@@ -194,7 +194,7 @@ export default function MonthlyExpensesPdfDocument({ data }: Props) {
         <View style={styles.header}>
           <Text style={styles.brand}>Budget Sohokari</Text>
           <Text style={styles.subtitle}>
-            Monthly Expense Report — {monthName} {data.year}
+            Monthly Expense Report - {monthName} {data.year}
           </Text>
           <Text style={styles.subtitle}>
             Smart budgeting assistant for YOU !
@@ -265,8 +265,8 @@ export default function MonthlyExpensesPdfDocument({ data }: Props) {
                       <Text style={styles.expenseTitle}>{expense.title}</Text>
                       <Text style={styles.expenseMeta}>
                         {expense.category}
-                        {expense.isFixed ? " • Fixed" : " • Variable"}
-                        {expense.note ? ` • ${expense.note}` : ""}
+                        {expense.isFixed ? " - Fixed" : " - Variable"}
+                        {expense.note ? ` - ${expense.note}` : ""}
                       </Text>
                     </View>
 

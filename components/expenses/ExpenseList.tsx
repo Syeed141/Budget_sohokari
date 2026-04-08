@@ -2,27 +2,22 @@
 
 import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
+import type { ExpenseRecord } from "@/types/expense";
 
-export type ExpenseItem = {
-  _id: string;
-  title: string;
-  amount: number;
-  category: string;
-  note?: string;
-  date: string;
-  isFixed: boolean;
-};
+export type ExpenseItem = ExpenseRecord;
 
 type ExpenseListProps = {
   expenses: ExpenseItem[];
   onEdit: (expense: ExpenseItem) => void;
   onDelete: (expenseId: string) => Promise<void>;
+  isDemo?: boolean;
 };
 
 export default function ExpenseList({
   expenses,
   onEdit,
   onDelete,
+  isDemo = false,
 }: ExpenseListProps) {
   return (
     <Card>
@@ -65,7 +60,7 @@ export default function ExpenseList({
                     Type
                   </th>
                   <th className="py-3 pr-4 text-sm font-semibold text-slate-600">
-                    Actions
+                    {isDemo ? "Preview" : "Actions"}
                   </th>
                 </tr>
               </thead>
@@ -90,7 +85,7 @@ export default function ExpenseList({
                     </td>
 
                     <td className="py-4 pr-4 text-sm font-medium text-slate-900">
-                      ৳ {expense.amount}
+                      BDT {expense.amount}
                     </td>
 
                     <td className="py-4 pr-4 text-sm text-slate-600">
@@ -102,22 +97,28 @@ export default function ExpenseList({
                     </td>
 
                     <td className="py-4 pr-4">
-                      <div className="flex gap-2">
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => onEdit(expense)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onDelete(expense._id)}
-                        >
-                          Delete
-                        </Button>
-                      </div>
+                      {isDemo ? (
+                        <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                          Demo only
+                        </span>
+                      ) : (
+                        <div className="flex gap-2">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => onEdit(expense)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onDelete(expense._id)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

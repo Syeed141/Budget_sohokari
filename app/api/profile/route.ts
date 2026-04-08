@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/components/lib/db";
 import { getSessionFromCookies } from "@/components/lib/auth";
 import User from "@/components/models/User";
+import { validatePersonName } from "@/components/lib/user-validation";
 
 export async function GET() {
   try {
@@ -87,7 +88,21 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    if (name !== undefined) user.name = String(name).trim();
+    if (name !== undefined) {
+      const validatedName = validatePersonName(name);
+
+      if (!validatedName.valid) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: validatedName.message || "Invalid name",
+          },
+          { status: 400 }
+        );
+      }
+
+      user.name = validatedName.value;
+    }
     if (city !== undefined) user.city = String(city).trim();
     if (profession !== undefined) user.profession = String(profession).trim();
 

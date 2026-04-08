@@ -1,12 +1,15 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useToast } from "@/components/ui/ToastProvider";
+import { validatePersonName } from "@/components/lib/user-validation";
 
 export default function RegisterForm() {
   const router = useRouter();
+  const { pushToast } = useToast();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,6 +18,7 @@ export default function RegisterForm() {
   });
 
   const [error, setError] = useState("");
+  const [nameError, setNameError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -27,12 +31,24 @@ export default function RegisterForm() {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "name" && nameError) {
+      setNameError("");
+    }
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setNameError("");
     setSuccess("");
+
+    const validatedName = validatePersonName(formData.name);
+    if (!validatedName.valid) {
+      setNameError(validatedName.message || "Invalid name");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -41,21 +57,29 @@ export default function RegisterForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          name: validatedName.value,
+        }),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.message || "Registration failed");
+        const message = result.message || "Registration failed";
+        setError(message);
+        pushToast(message, "error");
         return;
       }
 
       setSuccess("Account created successfully. Redirecting...");
+      pushToast("Account created successfully", "success");
       router.push("/dashboard");
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      const message = "Something went wrong. Please try again.";
+      setError(message);
+      pushToast(message, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -70,6 +94,9 @@ export default function RegisterForm() {
         placeholder="Your full name"
         value={formData.name}
         onChange={handleChange}
+        required
+        className={nameError ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+        helperText={nameError || "Letters and spaces only."}
       />
 
       <Input
@@ -109,3 +136,5 @@ export default function RegisterForm() {
     </form>
   );
 }
+
+

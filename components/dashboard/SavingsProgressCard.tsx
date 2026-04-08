@@ -42,14 +42,14 @@ export default function SavingsProgressCard({
           <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
             <p className="text-sm text-slate-500">Current Savings</p>
             <p className="mt-2 text-2xl font-bold text-slate-900">
-              ৳ {actualSavings}
+              BDT {actualSavings}
             </p>
           </div>
 
           <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
             <p className="text-sm text-slate-500">Savings Goal</p>
             <p className="mt-2 text-2xl font-bold text-slate-900">
-              ৳ {savingsGoal}
+              BDT {savingsGoal}
             </p>
           </div>
         </div>

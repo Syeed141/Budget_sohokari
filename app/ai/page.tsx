@@ -25,7 +25,7 @@ const sampleMessages = [
     id: 4,
     role: "assistant",
     content:
-      "Your current highest category appears to be food. If this trend continues, it may reduce your ability to reach this month’s savings goal.",
+      "Your current highest category appears to be food. If this trend continues, it may reduce your ability to reach this month's savings goal.",
   },
 ];
 
@@ -39,15 +39,17 @@ export default function AIPage() {
           description="Ask practical budget questions and get personalized guidance based on your income, expenses, and savings context."
         />
 
+        <div className="mb-6 rounded-2xl bg-[#d9f1e4] px-4 py-3 text-sm font-medium text-[#214b3d] ring-1 ring-[#78b79d]">
+          AI chat integration is coming in the next update.
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-3">
           <Card className="lg:col-span-2">
             <CardContent className="flex h-[650px] flex-col">
-              <div className="border-b border-slate-200 pb-4">
-                <h2 className="text-lg font-semibold text-slate-900">
-                  Chat
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  Later this will be connected to your real AI endpoint.
+              <div className="border-b border-[#78b79d] pb-4">
+                <h2 className="text-lg font-semibold text-[#091413]">Chat</h2>
+                <p className="mt-1 text-sm text-[#285A48]">
+                  Coming soon in the next update.
                 </p>
               </div>
 
@@ -57,8 +59,8 @@ export default function AIPage() {
                     key={message.id}
                     className={`max-w-[85%] rounded-3xl px-4 py-3 text-sm leading-6 ${
                       message.role === "user"
-                        ? "ml-auto bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-800 ring-1 ring-slate-200"
+                        ? "ml-auto bg-[#285A48] text-[#ecf8f1]"
+                        : "bg-[#ecf8f1] text-[#214b3d] ring-1 ring-[#78b79d]"
                     }`}
                   >
                     {message.content}
@@ -66,7 +68,7 @@ export default function AIPage() {
                 ))}
               </div>
 
-              <div className="border-t border-slate-200 pt-4">
+              <div className="border-t border-[#78b79d] pt-4">
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Input
                     placeholder="Ask something about your monthly budget..."
@@ -80,39 +82,37 @@ export default function AIPage() {
 
           <Card>
             <CardContent>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-[#091413]">
                 AI Context Preview
               </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                This side panel represents the kind of data the AI will later use
-                for more relevant advice.
+              <p className="mt-2 text-sm leading-6 text-[#285A48]">
+                This side panel represents the kind of data the AI will later
+                use for more relevant advice.
               </p>
 
               <div className="mt-6 space-y-4">
-                <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                  <p className="text-sm text-slate-500">Monthly Income</p>
-                  <p className="mt-2 text-xl font-bold text-slate-900">
+                <div className="rounded-2xl bg-[#ecf8f1] p-4 ring-1 ring-[#78b79d]">
+                  <p className="text-sm text-[#285A48]">Monthly Income</p>
+                  <p className="mt-2 text-xl font-bold text-[#091413]">
                     ৳ 25,000
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                  <p className="text-sm text-slate-500">Spent So Far</p>
-                  <p className="mt-2 text-xl font-bold text-slate-900">
+                <div className="rounded-2xl bg-[#ecf8f1] p-4 ring-1 ring-[#78b79d]">
+                  <p className="text-sm text-[#285A48]">Spent So Far</p>
+                  <p className="mt-2 text-xl font-bold text-[#091413]">
                     ৳ 12,400
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                  <p className="text-sm text-slate-500">Safe Daily Budget</p>
-                  <p className="mt-2 text-xl font-bold text-emerald-600">
-                    ৳ 420
-                  </p>
+                <div className="rounded-2xl bg-[#ecf8f1] p-4 ring-1 ring-[#78b79d]">
+                  <p className="text-sm text-[#285A48]">Safe Daily Budget</p>
+                  <p className="mt-2 text-xl font-bold text-[#408A71]">৳ 420</p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-900 p-4 text-white">
-                  <p className="text-sm text-slate-300">Current insight</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-100">
+                <div className="rounded-2xl bg-[#091413] p-4 text-[#B0E4CC]">
+                  <p className="text-sm text-[#9ed5c0]">Current insight</p>
+                  <p className="mt-2 text-sm leading-6 text-[#B0E4CC]">
                     Food spending is the area where the assistant is likely to
                     advise adjustment.
                   </p>
@@ -125,3 +125,4 @@ export default function AIPage() {
     </main>
   );
 }
+

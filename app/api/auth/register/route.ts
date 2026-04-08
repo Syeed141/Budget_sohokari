@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/components/lib/db";
 import User from "@/components/models/User";
 import { createSessionToken, setSessionCookie } from "@/components/lib/auth";
+import { validatePersonName } from "@/components/lib/user-validation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,6 +17,17 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           message: "Name, email, and password are required",
+        },
+        { status: 400 }
+      );
+    }
+
+    const validatedName = validatePersonName(name);
+    if (!validatedName.valid) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: validatedName.message || "Invalid name",
         },
         { status: 400 }
       );
@@ -48,7 +60,7 @@ export async function POST(request: NextRequest) {
     const passwordHash = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      name: name.trim(),
+      name: validatedName.value,
       email: normalizedEmail,
       passwordHash,
     });

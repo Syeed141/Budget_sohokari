@@ -6,6 +6,7 @@ import type {
   MonthlyChartRow,
   DailyExpenseGroup,
   CategoryTotal,
+  ExpenseRecord,
 } from "@/types/expense";
 
 const DEFAULT_CATEGORIES = [
@@ -69,33 +70,17 @@ function formatBDT(amount: number) {
   }).format(amount);
 }
 
-export async function getMonthlyExpenseAnalytics({
-  userId,
-  year,
-  month,
-}: GetMonthlyExpenseAnalyticsParams): Promise<MonthlyExpenseAnalytics> {
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    throw new Error("Invalid user ID");
-  }
+function formatDemoDate(day: number) {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), day, 12).toISOString();
+}
 
-  if (!year || !month || month < 1 || month > 12) {
-    throw new Error("Invalid month or year");
-  }
-
-  const { start, end } = getMonthDateRange(year, month);
-
-  const rawExpenses = await Expense.find({
-    userId,
-    date: {
-      $gte: start,
-      $lt: end,
-    },
-  })
-    .sort({ date: 1, createdAt: 1 })
-    .lean();
-
+function buildMonthlyExpenseAnalytics(
+  expenses: ExpenseItemDTO[],
+  year: number,
+  month: number
+): MonthlyExpenseAnalytics {
   const daysInMonth = getDaysInMonth(year, month);
-
   const chartRowsMap: Record<number, MonthlyChartRow> = {};
   const groupedExpensesMap: Record<string, ExpenseItemDTO[]> = {};
   const categoryTotalsMap: Record<string, number> = {};
@@ -113,11 +98,16 @@ export async function getMonthlyExpenseAnalytics({
     chartRowsMap[day] = row;
   }
 
-  for (const expense of rawExpenses) {
+  for (const expense of expenses) {
     const expenseDate = new Date(expense.date);
     const dayOfMonth = expenseDate.getDate();
     const category = normalizeCategory(expense.category);
     const amount = Number(expense.amount) || 0;
+    const localDateKey = new Date(
+      expenseDate.getFullYear(),
+      expenseDate.getMonth(),
+      expenseDate.getDate()
+    ).toISOString();
 
     if (chartRowsMap[dayOfMonth][category] === undefined) {
       chartRowsMap[dayOfMonth][category] = 0;
@@ -131,31 +121,25 @@ export async function getMonthlyExpenseAnalytics({
 
     categoryTotalsMap[category] = (categoryTotalsMap[category] || 0) + amount;
 
-    const localDateKey = new Date(expense.date).toISOString();
-
     if (!groupedExpensesMap[localDateKey]) {
       groupedExpensesMap[localDateKey] = [];
     }
 
     groupedExpensesMap[localDateKey].push({
-      id: String(expense._id),
-      title: expense.title,
-      amount,
+      ...expense,
       category,
-      note: expense.note || "",
-      date: new Date(expense.date).toISOString(),
-      isFixed: Boolean(expense.isFixed),
+      amount,
     });
   }
 
   const chartData = Object.values(chartRowsMap);
 
   const dailyGroups: DailyExpenseGroup[] = Object.entries(groupedExpensesMap)
-    .map(([date, expenses]) => ({
+    .map(([date, grouped]) => ({
       date,
       day: padDay(new Date(date).getDate()),
-      total: expenses.reduce((sum, item) => sum + item.amount, 0),
-      expenses: expenses.sort(
+      total: grouped.reduce((sum, item) => sum + item.amount, 0),
+      expenses: grouped.sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       ),
     }))
@@ -218,3 +202,147 @@ export async function getMonthlyExpenseAnalytics({
     insights,
   };
 }
+
+export async function getMonthlyExpenseAnalytics({
+  userId,
+  year,
+  month,
+}: GetMonthlyExpenseAnalyticsParams): Promise<MonthlyExpenseAnalytics> {
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new Error("Invalid user ID");
+  }
+
+  if (!year || !month || month < 1 || month > 12) {
+    throw new Error("Invalid month or year");
+  }
+
+  const { start, end } = getMonthDateRange(year, month);
+
+  const rawExpenses = await Expense.find({
+    userId,
+    date: {
+      $gte: start,
+      $lt: end,
+    },
+  })
+    .sort({ date: 1, createdAt: 1 })
+    .lean();
+
+  const normalizedExpenses: ExpenseItemDTO[] = rawExpenses.map((expense) => ({
+    id: String(expense._id),
+    title: expense.title,
+    amount: Number(expense.amount) || 0,
+    category: expense.category,
+    note: expense.note || "",
+    date: new Date(expense.date).toISOString(),
+    isFixed: Boolean(expense.isFixed),
+  }));
+
+  return buildMonthlyExpenseAnalytics(normalizedExpenses, year, month);
+}
+
+export function getDemoExpenses(): ExpenseRecord[] {
+  return [
+    {
+      _id: "demo-expense-1",
+      title: "Apartment rent",
+      amount: 18000,
+      category: "Rent",
+      note: "Monthly apartment payment",
+      date: formatDemoDate(2),
+      isFixed: true,
+    },
+    {
+      _id: "demo-expense-2",
+      title: "Grocery restock",
+      amount: 3450,
+      category: "Food",
+      note: "Weekly household groceries",
+      date: formatDemoDate(5),
+      isFixed: false,
+    },
+    {
+      _id: "demo-expense-3",
+      title: "Internet bill",
+      amount: 1500,
+      category: "Internet",
+      note: "Home broadband",
+      date: formatDemoDate(6),
+      isFixed: true,
+    },
+    {
+      _id: "demo-expense-4",
+      title: "Electricity bill",
+      amount: 3100,
+      category: "Bills",
+      note: "Current month usage",
+      date: formatDemoDate(8),
+      isFixed: true,
+    },
+    {
+      _id: "demo-expense-5",
+      title: "Office commute",
+      amount: 2200,
+      category: "Transport",
+      note: "Rideshare and fuel",
+      date: formatDemoDate(9),
+      isFixed: false,
+    },
+    {
+      _id: "demo-expense-6",
+      title: "Parents' medicine",
+      amount: 1850,
+      category: "Health",
+      note: "Monthly refill",
+      date: formatDemoDate(11),
+      isFixed: false,
+    },
+    {
+      _id: "demo-expense-7",
+      title: "Design course subscription",
+      amount: 1250,
+      category: "Education",
+      note: "Skill upgrade plan",
+      date: formatDemoDate(13),
+      isFixed: true,
+    },
+    {
+      _id: "demo-expense-8",
+      title: "Family dinner",
+      amount: 1950,
+      category: "Entertainment",
+      note: "Weekend outing",
+      date: formatDemoDate(15),
+      isFixed: false,
+    },
+    {
+      _id: "demo-expense-9",
+      title: "Kitchen supplies",
+      amount: 1650,
+      category: "Shopping",
+      note: "Storage boxes and cleaners",
+      date: formatDemoDate(18),
+      isFixed: false,
+    },
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export function getDemoMonthlyExpenseAnalytics(): MonthlyExpenseAnalytics {
+  const now = new Date();
+  const normalizedDemoExpenses: ExpenseItemDTO[] = getDemoExpenses().map((expense) => ({
+    id: expense._id,
+    title: expense.title,
+    amount: expense.amount,
+    category: expense.category,
+    note: expense.note || "",
+    date: expense.date,
+    isFixed: expense.isFixed,
+  }));
+
+  return buildMonthlyExpenseAnalytics(
+    normalizedDemoExpenses,
+    now.getFullYear(),
+    now.getMonth() + 1
+  );
+}
+

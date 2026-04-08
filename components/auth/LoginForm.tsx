@@ -1,12 +1,14 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useToast } from "@/components/ui/ToastProvider";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { pushToast } = useToast();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -46,15 +48,20 @@ export default function LoginForm() {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.message || "Login failed");
+        const message = result.message || "Login failed";
+        setError(message);
+        pushToast(message, "error");
         return;
       }
 
       setSuccess("Login successful. Redirecting...");
+      pushToast("Login successful", "success");
       router.push("/dashboard");
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      const message = "Something went wrong. Please try again.";
+      setError(message);
+      pushToast(message, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -98,3 +105,5 @@ export default function LoginForm() {
     </form>
   );
 }
+
+

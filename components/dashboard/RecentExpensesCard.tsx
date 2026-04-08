@@ -41,11 +41,11 @@ export default function RecentExpensesCard({
                 <div>
                   <p className="font-medium text-slate-900">{expense.title}</p>
                   <p className="mt-1 text-sm text-slate-500">
-                    {expense.category} • {new Date(expense.date).toLocaleDateString()}
+                    {expense.category} - {new Date(expense.date).toLocaleDateString()}
                   </p>
                 </div>
 
-                <p className="font-semibold text-slate-900">৳ {expense.amount}</p>
+                <p className="font-semibold text-slate-900">BDT {expense.amount}</p>
               </div>
             ))}
           </div>

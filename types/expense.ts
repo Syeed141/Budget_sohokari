@@ -1,14 +1,27 @@
-export type ExpenseCategory =
-  | "Food"
-  | "Transport"
-  | "Rent"
-  | "Internet"
-  | "Bills"
-  | "Shopping"
-  | "Health"
-  | "Education"
-  | "Entertainment"
-  | "Other";
+export const EXPENSE_CATEGORIES = [
+  "Food",
+  "Transport",
+  "Rent",
+  "Internet",
+  "Bills",
+  "Shopping",
+  "Health",
+  "Education",
+  "Entertainment",
+  "Other",
+] as const;
+
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
+
+export type ExpenseRecord = {
+  _id: string;
+  title: string;
+  amount: number;
+  category: string;
+  note?: string;
+  date: string;
+  isFixed: boolean;
+};
 
 export type ExpenseItemDTO = {
   id: string;

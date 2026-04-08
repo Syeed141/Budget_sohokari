@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ExpenseForm, { ExpenseFormData } from "@/components/expenses/ExpenseForm";
 import ExpenseList, { ExpenseItem } from "@/components/expenses/ExpenseList";
+import { useToast } from "@/components/ui/ToastProvider";
 
 type ApiResponse = {
   success: boolean;
@@ -10,13 +11,28 @@ type ApiResponse = {
   data?: ExpenseItem[];
 };
 
-export default function ExpenseManager() {
-  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+type ExpenseManagerProps = {
+  initialExpenses?: ExpenseItem[];
+  isDemo?: boolean;
+};
+
+export default function ExpenseManager({
+  initialExpenses = [],
+  isDemo = false,
+}: ExpenseManagerProps) {
+  const { pushToast } = useToast();
+  const [expenses, setExpenses] = useState<ExpenseItem[]>(initialExpenses);
   const [editingExpense, setEditingExpense] = useState<ExpenseItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!isDemo);
   const [error, setError] = useState("");
 
-  async function fetchExpenses() {
+  const fetchExpenses = useCallback(async () => {
+    if (isDemo) {
+      setExpenses(initialExpenses);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setError("");
 
@@ -24,21 +40,25 @@ export default function ExpenseManager() {
       const result: ApiResponse = await response.json();
 
       if (!response.ok) {
-        setError(result.message || "Failed to fetch expenses");
+        const message = result.message || "Failed to fetch expenses";
+        setError(message);
+        pushToast(message, "error");
         return;
       }
 
       setExpenses(result.data || []);
     } catch {
-      setError("Something went wrong while fetching expenses");
+      const message = "Something went wrong while fetching expenses";
+      setError(message);
+      pushToast(message, "error");
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [initialExpenses, isDemo, pushToast]);
 
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [fetchExpenses]);
 
   async function handleCreateExpense(formData: ExpenseFormData) {
     setError("");
@@ -61,10 +81,13 @@ export default function ExpenseManager() {
     const result = await response.json();
 
     if (!response.ok) {
-      setError(result.message || "Failed to create expense");
+      const message = result.message || "Failed to create expense";
+      setError(message);
+      pushToast(message, "error");
       return;
     }
 
+    pushToast("Expense added", "success");
     await fetchExpenses();
   }
 
@@ -91,11 +114,14 @@ export default function ExpenseManager() {
     const result = await response.json();
 
     if (!response.ok) {
-      setError(result.message || "Failed to update expense");
+      const message = result.message || "Failed to update expense";
+      setError(message);
+      pushToast(message, "error");
       return;
     }
 
     setEditingExpense(null);
+    pushToast("Expense updated", "success");
     await fetchExpenses();
   }
 
@@ -109,7 +135,9 @@ export default function ExpenseManager() {
     const result = await response.json();
 
     if (!response.ok) {
-      setError(result.message || "Failed to delete expense");
+      const message = result.message || "Failed to delete expense";
+      setError(message);
+      pushToast(message, "error");
       return;
     }
 
@@ -117,6 +145,7 @@ export default function ExpenseManager() {
       setEditingExpense(null);
     }
 
+    pushToast("Expense deleted", "success");
     await fetchExpenses();
   }
 
@@ -149,6 +178,7 @@ export default function ExpenseManager() {
           isEditing={Boolean(editingExpense)}
           onSubmit={editingExpense ? handleUpdateExpense : handleCreateExpense}
           onCancelEdit={handleCancelEdit}
+          isDemo={isDemo}
         />
 
         {error ? (
@@ -168,6 +198,7 @@ export default function ExpenseManager() {
             expenses={expenses}
             onEdit={handleEdit}
             onDelete={handleDeleteExpense}
+            isDemo={isDemo}
           />
         )}
       </div>

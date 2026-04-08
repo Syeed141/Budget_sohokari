@@ -42,7 +42,7 @@ export default function CategoryBreakdownCard({
                     <span className="font-medium text-slate-700">
                       {item.category}
                     </span>
-                    <span className="text-slate-600">৳ {item.total}</span>
+                    <span className="text-slate-600">BDT {item.total}</span>
                   </div>
 
                   <div className="h-3 rounded-full bg-slate-100">

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 
 export const metadata: Metadata = {
-  title: "BudgetMate Dhaka",
+  title: "Budget Sohokari",
   description:
-    "A smart budgeting assistant for fresh graduates and early-career workers in Dhaka.",
+    "Budget Sohokari is a smart budgeting assistant for fresh graduates and early-career workers in Dhaka.",
 };
 
 export default function RootLayout({
@@ -15,10 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
-        <Navbar />
-        {children}
+      <body className="min-h-screen antialiased">
+        <ToastProvider>
+          <Navbar />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );
 }
+

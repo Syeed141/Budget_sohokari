@@ -1,6 +1,6 @@
 "use client";
 
-import {Card} from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import { formatBDT, formatShortDate } from "@/components/lib/format";
 import type { DailyExpenseGroup } from "@/types/expense";
 
@@ -59,8 +59,8 @@ export default function MonthlyDailyBreakdown({ groups }: Props) {
                       </p>
                       <p className="mt-1 text-sm text-slate-500">
                         {expense.category}
-                        {expense.isFixed ? " • Fixed" : " • Variable"}
-                        {expense.note ? ` • ${expense.note}` : ""}
+                        {expense.isFixed ? " - Fixed" : " - Variable"}
+                        {expense.note ? ` - ${expense.note}` : ""}
                       </p>
                     </div>
 

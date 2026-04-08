@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/components/lib/db";
 import Expense from "@/components/models/Expense";
 import { getSessionFromCookies } from "@/components/lib/auth";
+import { validateExpenseInput } from "@/components/lib/expense-validation";
 
 type RouteContext = {
   params: Promise<{
@@ -25,8 +26,6 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     const { id } = await context.params;
     const body = await request.json();
-    const { title, amount, category, note, date, isFixed } = body;
-
     await connectToDatabase();
 
     const expense = await Expense.findOne({
@@ -44,26 +43,25 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       );
     }
 
-    if (title !== undefined) expense.title = title.trim();
-    if (amount !== undefined) {
-      const parsedAmount = Number(amount);
-
-      if (Number.isNaN(parsedAmount) || parsedAmount < 0) {
-        return NextResponse.json(
-          {
-            success: false,
-            message: "Amount must be a valid non-negative number",
-          },
-          { status: 400 }
-        );
-      }
-
-      expense.amount = parsedAmount;
+    const validation = validateExpenseInput(body, true);
+    if (!validation.data) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: validation.message || "Invalid expense input",
+        },
+        { status: 400 }
+      );
     }
-    if (category !== undefined) expense.category = category.trim();
-    if (note !== undefined) expense.note = note.trim();
-    if (date !== undefined) expense.date = date;
-    if (isFixed !== undefined) expense.isFixed = Boolean(isFixed);
+
+    const { title, amount, category, note, date, isFixed } = validation.data;
+
+    if (title !== undefined) expense.title = title;
+    if (amount !== undefined) expense.amount = amount;
+    if (category !== undefined) expense.category = category;
+    if (note !== undefined) expense.note = note;
+    if (date !== undefined) expense.date = new Date(date);
+    if (isFixed !== undefined) expense.isFixed = isFixed;
 
     await expense.save();
 

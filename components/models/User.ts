@@ -18,6 +18,12 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
       trim: true,
+      minlength: 2,
+      maxlength: 60,
+      validate: {
+        validator: (value: string) => /^[\p{L}\s]+$/u.test(value),
+        message: "Name must contain letters only",
+      },
     },
     email: {
       type: String,

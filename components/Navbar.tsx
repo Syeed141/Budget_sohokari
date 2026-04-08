@@ -13,22 +13,27 @@ const navLinks = [
 
 export default async function Navbar() {
   const session = await getSessionFromCookies();
+  const visibleLinks = session
+    ? navLinks
+    : navLinks.filter(
+        (link) => link.href === "/dashboard" || link.href === "/expenses"
+      );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[#408A71]/70 bg-[#091413]/92 backdrop-blur-xl">
       <Container className="flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-lg font-bold tracking-tight text-slate-900">
+          <Link href="/" className="text-lg font-bold tracking-tight text-[#B0E4CC]">
             Budget Sohokari
           </Link>
 
-          {session ? (
+          {visibleLinks.length > 0 ? (
             <nav className="hidden items-center gap-5 md:flex">
-              {navLinks.map((link) => (
+              {visibleLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-slate-600 transition hover:text-slate-900"
+                  className="text-sm font-medium text-[#9ed5c0] transition hover:text-[#B0E4CC]"
                 >
                   {link.label}
                 </Link>
@@ -40,7 +45,7 @@ export default async function Navbar() {
         <div className="flex items-center gap-3">
           {session ? (
             <>
-              <span className="hidden text-sm text-slate-600 sm:inline">
+              <span className="hidden text-sm text-[#9ed5c0] sm:inline">
                 {session.name}
               </span>
               <LogoutButton />

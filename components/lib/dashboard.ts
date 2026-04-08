@@ -36,6 +36,11 @@ export type DashboardSummary = {
   }>;
 };
 
+function formatDemoDate(day: number) {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), day, 12).toISOString();
+}
+
 function getMonthRange(date = new Date()) {
   const start = new Date(date.getFullYear(), date.getMonth(), 1);
   const end = new Date(date.getFullYear(), date.getMonth() + 1, 1);
@@ -87,10 +92,14 @@ export async function getDashboardData(userId: string): Promise<DashboardSummary
 
   const monthlyIncome = user.monthlyIncome || 0;
   const savingsGoal = user.monthlySavingsGoal || 0;
+  const monthlySpendableBudget = monthlyIncome - savingsGoal;
+  const remainingSpendableBudget = monthlySpendableBudget - totalMonthlyExpenses;
   const remainingBalance = monthlyIncome - totalMonthlyExpenses;
   const actualSavings = remainingBalance;
   const remainingDays = getRemainingDaysInMonth(now);
-  const safeDailySpend = remainingBalance > 0 ? remainingBalance / remainingDays : 0;
+  // Daily safe spend is based on the spendable portion of income
+  // after reserving savings goal, distributed across remaining days.
+  const safeDailySpend = remainingSpendableBudget / remainingDays;
 
   const categoryMap = new Map<string, number>();
 
@@ -140,5 +149,98 @@ export async function getDashboardData(userId: string): Promise<DashboardSummary
       isFixed: expense.isFixed,
       note: expense.note || "",
     })),
+  };
+}
+
+export function getDemoDashboardData(): DashboardSummary {
+  const monthlyIncome = 85000;
+  const savingsGoal = 15000;
+  const monthlyExpenses = 46850;
+  const remainingBalance = monthlyIncome - monthlyExpenses;
+  const remainingDays = getRemainingDaysInMonth();
+  const monthlySpendableBudget = monthlyIncome - savingsGoal;
+  const remainingSpendableBudget = monthlySpendableBudget - monthlyExpenses;
+  const safeDailySpend = remainingSpendableBudget / remainingDays;
+  const actualSavings = remainingBalance;
+  const savingsProgressPercentage =
+    savingsGoal > 0
+      ? Math.min(Math.max((actualSavings / savingsGoal) * 100, 0), 100)
+      : 0;
+
+  return {
+    user: {
+      id: "demo-user",
+      name: "Nusrat Jahan",
+      email: "nusrat.demo@example.com",
+      city: "Dhaka",
+      profession: "Senior Product Designer",
+      monthlyIncome,
+      monthlySavingsGoal: savingsGoal,
+    },
+    totals: {
+      monthlyIncome: roundToTwo(monthlyIncome),
+      monthlyExpenses: roundToTwo(monthlyExpenses),
+      remainingBalance: roundToTwo(remainingBalance),
+      safeDailySpend: roundToTwo(safeDailySpend),
+      actualSavings: roundToTwo(actualSavings),
+      savingsGoal: roundToTwo(savingsGoal),
+      savingsProgressPercentage: roundToTwo(savingsProgressPercentage),
+    },
+    categoryBreakdown: [
+      { category: "Rent", total: 18000 },
+      { category: "Food", total: 9650 },
+      { category: "Transport", total: 5200 },
+      { category: "Utilities", total: 4600 },
+      { category: "Family", total: 3900 },
+      { category: "Health", total: 3100 },
+      { category: "Entertainment", total: 2400 },
+    ],
+    recentExpenses: [
+      {
+        _id: "demo-expense-1",
+        title: "April apartment rent",
+        category: "Rent",
+        amount: 18000,
+        date: formatDemoDate(2),
+        isFixed: true,
+        note: "Monthly house rent",
+      },
+      {
+        _id: "demo-expense-2",
+        title: "Weekly groceries",
+        category: "Food",
+        amount: 3450,
+        date: formatDemoDate(7),
+        isFixed: false,
+        note: "Kitchen staples and produce",
+      },
+      {
+        _id: "demo-expense-3",
+        title: "Internet and electricity",
+        category: "Utilities",
+        amount: 4600,
+        date: formatDemoDate(8),
+        isFixed: true,
+        note: "Home bills",
+      },
+      {
+        _id: "demo-expense-4",
+        title: "Ride share and fuel",
+        category: "Transport",
+        amount: 2200,
+        date: formatDemoDate(9),
+        isFixed: false,
+        note: "Office commute",
+      },
+      {
+        _id: "demo-expense-5",
+        title: "Parents' medicine",
+        category: "Health",
+        amount: 1850,
+        date: formatDemoDate(9),
+        isFixed: false,
+        note: "Monthly refill",
+      },
+    ],
   };
 }

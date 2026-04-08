@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #B0E4CC;
+  --foreground: #091413;
+  --surface: #D9F1E4;
+  --surface-muted: #C5EAD8;
+  --border: #78B79D;
+  --primary: #285A48;
+  --primary-hover: #1F483A;
+  --accent: #408A71;
 }
 
 html {
@@ -10,7 +16,7 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: #B0E4CC;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -20,7 +26,7 @@ body {
 }
 
 ::selection {
-  background: #0f172a;
+  background: #285A48;
   color: white;
 }
 
@@ -73,3 +79,23 @@ body {
 .animate-drift-soft {
   animation: driftSoft 10s ease-in-out infinite;
 }
+
+.home-scroll section {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.home-scroll section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-scroll section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+

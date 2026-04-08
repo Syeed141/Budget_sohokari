@@ -9,7 +9,7 @@ if (!JWT_SECRET) {
 
 const secretKey = new TextEncoder().encode(JWT_SECRET);
 
-const protectedRoutes = ["/dashboard", "/expenses", "/profile", "/ai"];
+const protectedRoutes = ["/profile", "/ai"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -37,5 +37,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/expenses/:path*", "/profile/:path*", "/ai/:path*"],
+  matcher: ["/profile/:path*", "/ai/:path*"],
 };

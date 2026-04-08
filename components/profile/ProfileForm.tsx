@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
+import { useToast } from "@/components/ui/ToastProvider";
+import { validatePersonName } from "@/components/lib/user-validation";
 
 type ProfileFormProps = {
   initialData: {
@@ -18,6 +20,7 @@ type ProfileFormProps = {
 
 export default function ProfileForm({ initialData }: ProfileFormProps) {
   const router = useRouter();
+  const { pushToast } = useToast();
 
   const [formData, setFormData] = useState({
     name: initialData.name,
@@ -28,6 +31,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
   });
 
   const [error, setError] = useState("");
+  const [nameError, setNameError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,12 +42,24 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "name" && nameError) {
+      setNameError("");
+    }
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setNameError("");
     setSuccess("");
+
+    const validatedName = validatePersonName(formData.name);
+    if (!validatedName.valid) {
+      setNameError(validatedName.message || "Invalid name");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -53,7 +69,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.name,
+          name: validatedName.value,
           city: formData.city,
           profession: formData.profession,
           monthlyIncome: Number(formData.monthlyIncome),
@@ -64,14 +80,19 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.message || "Failed to update profile");
+        const message = result.message || "Failed to update profile";
+        setError(message);
+        pushToast(message, "error");
         return;
       }
 
       setSuccess("Profile updated successfully");
+      pushToast("Profile updated successfully", "success");
       router.refresh();
     } catch {
-      setError("Something went wrong while updating your profile");
+      const message = "Something went wrong while updating your profile";
+      setError(message);
+      pushToast(message, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -94,6 +115,9 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
             placeholder="Your name"
             value={formData.name}
             onChange={handleChange}
+            required
+            className={nameError ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+            helperText={nameError || "Letters and spaces only."}
           />
 
           <Input
@@ -152,3 +176,4 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
     </Card>
   );
 }
+

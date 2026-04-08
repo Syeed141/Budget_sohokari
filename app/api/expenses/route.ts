@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/components/lib/db";
 import Expense from "@/components/models/Expense";
 import { getSessionFromCookies } from "@/components/lib/auth";
+import { validateExpenseInput } from "@/components/lib/expense-validation";
 
 export async function GET() {
   try {
@@ -58,9 +59,24 @@ export async function POST(request: NextRequest) {
     await connectToDatabase();
 
     const body = await request.json();
-    const { title, amount, category, note, date, isFixed } = body;
+    const validation = validateExpenseInput(body, false);
+    if (!validation.data) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: validation.message || "Invalid expense input",
+        },
+        { status: 400 }
+      );
+    }
+    const { title, amount, category, note, date, isFixed } = validation.data;
 
-    if (!title || amount === undefined || !category || !date) {
+    if (
+      title === undefined ||
+      amount === undefined ||
+      category === undefined ||
+      date === undefined
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -70,26 +86,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const parsedAmount = Number(amount);
-
-    if (Number.isNaN(parsedAmount) || parsedAmount < 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Amount must be a valid non-negative number",
-        },
-        { status: 400 }
-      );
-    }
-
     const expense = await Expense.create({
       userId: session.userId,
-      title: title.trim(),
-      amount: parsedAmount,
-      category: category.trim(),
-      note: note?.trim() || "",
-      date,
-      isFixed: Boolean(isFixed),
+      title,
+      amount,
+      category,
+      note: note || "",
+      date: new Date(date),
+      isFixed,
     });
 
     return NextResponse.json(
