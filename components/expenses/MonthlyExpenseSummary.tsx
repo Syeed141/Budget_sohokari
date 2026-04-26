@@ -20,20 +20,20 @@ export default function MonthlyExpenseSummary({
   const topCategories = categoryTotals.slice(0, 3);
 
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-6">
       <div className="mb-5">
-        <h2 className="text-lg font-semibold text-slate-900">
+        <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
           {getMonthName(month)} {year} Summary
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-[color:var(--secondary)]">
           Your expense overview for the selected month.
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4">
-          <p className="text-sm text-slate-500">Total Spent</p>
-          <p className="mt-2 text-xl font-semibold text-slate-900">
+        <div className="typewriter-panel rounded-[2px] p-4">
+          <p className="typewriter-label text-[color:var(--secondary)]">Total Spent</p>
+          <p className="mt-2 text-xl font-semibold text-[color:var(--foreground)]">
             {formatBDT(totalMonthlyExpense)}
           </p>
         </div>
@@ -41,10 +41,10 @@ export default function MonthlyExpenseSummary({
         {topCategories.map((item) => (
           <div
             key={item.category}
-            className="rounded-2xl border border-slate-200 bg-white p-4"
+            className="typewriter-panel rounded-[2px] p-4"
           >
-            <p className="text-sm text-slate-500">{item.category}</p>
-            <p className="mt-2 text-xl font-semibold text-slate-900">
+            <p className="typewriter-label text-[color:var(--secondary)]">{item.category}</p>
+            <p className="mt-2 text-xl font-semibold text-[color:var(--foreground)]">
               {formatBDT(item.amount)}
             </p>
           </div>

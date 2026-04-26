@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
 } from "recharts";
 import {Card} from "@/components/ui/Card";
 import { formatBDT } from "@/components/lib/format";
@@ -20,16 +19,16 @@ type Props = {
 };
 
 const CATEGORY_CONFIG = [
-  { key: "Food", color: "#ef4444" },
-  { key: "Transport", color: "#f59e0b" },
-  { key: "Rent", color: "#8b5cf6" },
-  { key: "Internet", color: "#06b6d4" },
-  { key: "Bills", color: "#3b82f6" },
-  { key: "Shopping", color: "#ec4899" },
-  { key: "Health", color: "#22c55e" },
-  { key: "Education", color: "#14b8a6" },
-  { key: "Entertainment", color: "#a855f7" },
-  { key: "Other", color: "#64748b" },
+  { key: "Food", color: "#1A0F00" },
+  { key: "Transport", color: "#6B5B3E" },
+  { key: "Rent", color: "#A8271E" },
+  { key: "Internet", color: "#8A7653" },
+  { key: "Bills", color: "#3E2E16" },
+  { key: "Shopping", color: "#B9564A" },
+  { key: "Health", color: "#7D2A20" },
+  { key: "Education", color: "#9A8661" },
+  { key: "Entertainment", color: "#533A18" },
+  { key: "Other", color: "#6B5B3E" },
 ];
 
 type FilterValue = "All" | (typeof CATEGORY_CONFIG)[number]["key"];
@@ -53,9 +52,9 @@ function CustomTooltip({ active, payload, label }: TooltipProps) {
   const total = visibleItems.reduce((sum, item) => sum + Number(item.value || 0), 0);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
-      <p className="mb-2 text-sm font-semibold text-slate-900">Day {label}</p>
-      <p className="mb-3 text-sm text-slate-600">Total: {formatBDT(total)}</p>
+    <div className="typewriter-card rounded-[2px] p-4 shadow-xl">
+      <p className="typewriter-label mb-2 text-[color:var(--secondary)]">Day {label}</p>
+      <p className="mb-3 text-sm text-[color:var(--foreground)]">Total: {formatBDT(total)}</p>
 
       <div className="space-y-2">
         {visibleItems.length > 0 ? (
@@ -69,15 +68,15 @@ function CustomTooltip({ active, payload, label }: TooltipProps) {
                   className="inline-block h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-slate-700">{item.dataKey}</span>
+                <span className="text-[color:var(--foreground)]">{item.dataKey}</span>
               </div>
-              <span className="font-medium text-slate-900">
+              <span className="font-medium text-[color:var(--foreground)]">
                 {formatBDT(Number(item.value))}
               </span>
             </div>
           ))
         ) : (
-          <p className="text-sm text-slate-500">No expense recorded.</p>
+          <p className="text-sm text-[color:var(--secondary)]">No expense recorded.</p>
         )}
       </div>
     </div>
@@ -105,25 +104,25 @@ export default function MonthlyExpensesChart({ data }: Props) {
       : CATEGORY_CONFIG.filter((item) => item.key === selectedCategory);
 
   return (
-    <Card className="p-6">
+    <Card className="min-w-0 p-4 sm:p-6">
       <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
             Daily Monthly Expense Chart
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[color:var(--secondary)]">
             Review daily totals and isolate spending by category.
           </p>
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700">
+        <div className="w-full sm:w-auto">
+          <label className="typewriter-label mb-1 block text-[color:var(--secondary)]">
             Category Filter
           </label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value as FilterValue)}
-            className="min-w-[180px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300"
+            className="w-full rounded-none border border-[color:var(--border-soft)] bg-[rgba(245,234,200,0.92)] px-3 py-2 text-sm text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] sm:min-w-[180px]"
           >
             <option value="All">All Categories</option>
             {CATEGORY_CONFIG.map((item) => (
@@ -135,18 +134,27 @@ export default function MonthlyExpensesChart({ data }: Props) {
         </div>
       </div>
 
-      <div className="h-[380px] w-full">
+      <div className="h-[280px] w-full min-w-0 sm:h-[380px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={filteredData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="day" tickLine={false} axisLine={false} />
+            <CartesianGrid
+              strokeDasharray="2 4"
+              vertical={false}
+              stroke="rgba(107, 91, 62, 0.28)"
+            />
+            <XAxis
+              dataKey="day"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "#6B5B3E", fontSize: 11 }}
+            />
             <YAxis
               tickLine={false}
               axisLine={false}
+              tick={{ fill: "#6B5B3E", fontSize: 11 }}
               tickFormatter={(value) => `${value}`}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
             {activeCategories.map((item) => (
               <Bar
                 key={item.key}

@@ -16,39 +16,39 @@ export default function SavingsProgressCard({
   return (
     <Card>
       <CardContent>
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="typewriter-display text-lg text-[color:var(--foreground)]">
           Savings Status
         </h3>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-[color:var(--secondary)]">
           Compare your current monthly savings against your target.
         </p>
 
         <div className="mt-6 space-y-4">
           <div>
             <div className="mb-2 flex items-center justify-between text-sm">
-              <span className="text-slate-500">Goal progress</span>
-              <span className="font-semibold text-slate-900">
+              <span className="typewriter-label text-[color:var(--secondary)]">Goal progress</span>
+              <span className="font-semibold text-[color:var(--foreground)]">
                 {progressWidth}%
               </span>
             </div>
-            <div className="h-3 rounded-full bg-slate-100">
+            <div className="h-3 rounded-full bg-[rgba(107,91,62,0.12)]">
               <div
-                className="h-3 rounded-full bg-emerald-500"
+                className="h-3 rounded-full bg-[color:var(--primary)]"
                 style={{ width: `${progressWidth}%` }}
               />
             </div>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-            <p className="text-sm text-slate-500">Current Savings</p>
-            <p className="mt-2 text-2xl font-bold text-slate-900">
+          <div className="typewriter-panel rounded-[2px] p-4">
+            <p className="typewriter-label text-[color:var(--secondary)]">Current Savings</p>
+            <p className="mt-2 text-2xl font-bold text-[color:var(--foreground)]">
               BDT {actualSavings}
             </p>
           </div>
 
-          <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-            <p className="text-sm text-slate-500">Savings Goal</p>
-            <p className="mt-2 text-2xl font-bold text-slate-900">
+          <div className="typewriter-panel rounded-[2px] p-4">
+            <p className="typewriter-label text-[color:var(--secondary)]">Savings Goal</p>
+            <p className="mt-2 text-2xl font-bold text-[color:var(--foreground)]">
               BDT {savingsGoal}
             </p>
           </div>

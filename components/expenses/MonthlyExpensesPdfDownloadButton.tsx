@@ -21,7 +21,7 @@ export default function MonthlyExpensesPdfDownloadButton({ data }: Props) {
       fileName={getFileName(data)}
     >
       {({ loading }) => (
-        <Button disabled={loading}>
+        <Button className="w-full sm:w-auto" disabled={loading}>
           {loading ? "Preparing PDF..." : "Download PDF"}
         </Button>
       )}

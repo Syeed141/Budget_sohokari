@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -22,9 +22,7 @@ export default function RegisterForm() {
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
 
     setFormData((prev) => ({
@@ -112,20 +110,20 @@ export default function RegisterForm() {
         label="Password"
         name="password"
         type="password"
-        placeholder="••••••••"
+        placeholder="Minimum 8 characters"
         helperText="Use at least 8 characters."
         value={formData.password}
         onChange={handleChange}
       />
 
       {error ? (
-        <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="typewriter-alert rounded-[2px] px-4 py-3 text-sm">
           {error}
         </p>
       ) : null}
 
       {success ? (
-        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+        <p className="typewriter-status rounded-[2px] px-4 py-3 text-sm">
           {success}
         </p>
       ) : null}
@@ -136,5 +134,3 @@ export default function RegisterForm() {
     </form>
   );
 }
-
-

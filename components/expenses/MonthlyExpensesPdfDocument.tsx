@@ -37,15 +37,15 @@ const styles = StyleSheet.create({
   page: {
     padding: 32,
     fontSize: 11,
-    fontFamily: "Helvetica",
-    color: "#0f172a",
-    backgroundColor: "#ffffff",
+    fontFamily: "Courier",
+    color: "#1A0F00",
+    backgroundColor: "#F5EAC8",
   },
   header: {
     marginBottom: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#B0E4CC",
+    borderBottomColor: "#6B5B3E",
     borderBottomStyle: "solid",
   },
   brand: {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 10,
-    color: "#475569",
+    color: "#6B5B3E",
     marginBottom: 2,
   },
   section: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     width: "48%",
     borderWidth: 1,
-    borderColor: "#B0E4CC",
+    borderColor: "#6B5B3E",
     borderStyle: "solid",
     borderRadius: 8,
     padding: 10,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 9,
-    color: "#64748b",
+    color: "#6B5B3E",
     marginBottom: 4,
   },
   summaryValue: {
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: "#d9f1e4",
+    borderBottomColor: "#D8C89A",
     borderBottomStyle: "solid",
     paddingVertical: 6,
   },
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   insightCard: {
     borderWidth: 1,
-    borderColor: "#B0E4CC",
+    borderColor: "#6B5B3E",
     borderStyle: "solid",
     borderRadius: 8,
     padding: 10,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   insightLabel: {
     fontSize: 9,
-    color: "#64748b",
+    color: "#6B5B3E",
     marginBottom: 4,
   },
   insightValue: {
@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
   },
   insightHelper: {
     fontSize: 9,
-    color: "#64748b",
+    color: "#6B5B3E",
   },
   dailyGroup: {
     borderWidth: 1,
-    borderColor: "#B0E4CC",
+    borderColor: "#6B5B3E",
     borderStyle: "solid",
     borderRadius: 8,
     padding: 10,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: "#ecf8f1",
+    borderBottomColor: "#D8C89A",
     borderBottomStyle: "solid",
   },
   expenseLeft: {
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   expenseMeta: {
     fontSize: 9,
-    color: "#64748b",
+    color: "#6B5B3E",
   },
   expenseAmount: {
     width: "25%",
@@ -173,14 +173,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: "#B0E4CC",
+    borderTopColor: "#6B5B3E",
     borderTopStyle: "solid",
     fontSize: 9,
-    color: "#64748b",
+    color: "#6B5B3E",
   },
   emptyText: {
     fontSize: 10,
-    color: "#64748b",
+    color: "#6B5B3E",
   },
 });
 

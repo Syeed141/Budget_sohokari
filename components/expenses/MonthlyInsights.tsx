@@ -9,12 +9,12 @@ type Props = {
 
 export default function MonthlyInsights({ insights }: Props) {
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-6">
       <div className="mb-5">
-        <h2 className="text-lg font-semibold text-slate-900">
+        <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
           Monthly Insights
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-[color:var(--secondary)]">
           Quick budgeting signals from your selected month.
         </p>
       </div>
@@ -23,14 +23,14 @@ export default function MonthlyInsights({ insights }: Props) {
         {insights.map((item) => (
           <div
             key={item.label}
-            className="rounded-2xl border border-slate-200 bg-white p-4"
+            className="typewriter-panel rounded-[2px] p-4"
           >
-            <p className="text-sm text-slate-500">{item.label}</p>
-            <p className="mt-2 text-lg font-semibold text-slate-900">
+            <p className="typewriter-label text-[color:var(--secondary)]">{item.label}</p>
+            <p className="mt-2 text-lg font-semibold text-[color:var(--foreground)]">
               {item.value}
             </p>
             {item.helperText ? (
-              <p className="mt-1 text-xs text-slate-500">{item.helperText}</p>
+              <p className="mt-1 text-xs text-[color:var(--secondary)]">{item.helperText}</p>
             ) : null}
           </div>
         ))}

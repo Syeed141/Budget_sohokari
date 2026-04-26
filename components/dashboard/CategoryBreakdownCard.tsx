@@ -17,16 +17,16 @@ export default function CategoryBreakdownCard({
   return (
     <Card>
       <CardContent>
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="typewriter-display text-lg text-[color:var(--foreground)]">
           Top Spending Categories
         </h3>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-[color:var(--secondary)]">
           Based on this month&apos;s expenses.
         </p>
 
         {items.length === 0 ? (
-          <div className="mt-6 rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-            <p className="text-sm text-slate-600">
+          <div className="mt-6 rounded-[2px] border border-dashed border-[color:var(--border-soft)] bg-[rgba(245,234,200,0.65)] p-8 text-center">
+            <p className="text-sm text-[color:var(--secondary)]">
               No category data yet for this month.
             </p>
           </div>
@@ -39,15 +39,15 @@ export default function CategoryBreakdownCard({
               return (
                 <div key={item.category}>
                   <div className="mb-2 flex items-center justify-between text-sm">
-                    <span className="font-medium text-slate-700">
+                    <span className="font-medium text-[color:var(--foreground)]">
                       {item.category}
                     </span>
-                    <span className="text-slate-600">BDT {item.total}</span>
+                    <span className="text-[color:var(--secondary)]">BDT {item.total}</span>
                   </div>
 
-                  <div className="h-3 rounded-full bg-slate-100">
+                  <div className="h-3 rounded-full bg-[rgba(107,91,62,0.12)]">
                     <div
-                      className="h-3 rounded-full bg-slate-900"
+                      className="h-3 rounded-full bg-[color:var(--foreground)]"
                       style={{ width: `${width}%` }}
                     />
                   </div>

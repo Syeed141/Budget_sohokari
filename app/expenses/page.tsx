@@ -26,7 +26,7 @@ export default async function ExpensesPage() {
       />
 
       {isDemo ? (
-        <section className="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50/80 p-5 text-sm text-emerald-950 shadow-sm">
+        <section className="typewriter-status mt-6 rounded-[2px] p-5 text-sm shadow-sm">
           <p className="leading-6">
             You are viewing a sample expense workspace. Sign in to add, edit, delete,
             and export your own monthly expense data.

@@ -46,28 +46,34 @@ export default async function ProfilePage() {
 
           <Card>
             <CardContent>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
                 Profile Summary
               </h2>
 
               <div className="mt-6 space-y-4">
-                <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                  <p className="text-sm text-slate-500">Monthly Income</p>
-                  <p className="mt-2 text-2xl font-bold text-slate-900">
-                    ৳ {user.monthlyIncome || 0}
+                <div className="typewriter-panel rounded-[2px] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Monthly Income
+                  </p>
+                  <p className="mt-2 text-2xl font-bold text-[color:var(--foreground)]">
+                    BDT {user.monthlyIncome || 0}
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                  <p className="text-sm text-slate-500">Savings Goal</p>
-                  <p className="mt-2 text-2xl font-bold text-slate-900">
-                    ৳ {user.monthlySavingsGoal || 0}
+                <div className="typewriter-panel rounded-[2px] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Savings Goal
+                  </p>
+                  <p className="mt-2 text-2xl font-bold text-[color:var(--foreground)]">
+                    BDT {user.monthlySavingsGoal || 0}
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-slate-900 p-4 text-white">
-                  <p className="text-sm text-slate-300">Planning note</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-100">
+                <div className="rounded-[2px] border border-[rgba(168,39,30,0.22)] bg-[rgba(168,39,30,0.08)] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Planning note
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
                     Higher income clarity creates better daily budget guidance.
                   </p>
                 </div>

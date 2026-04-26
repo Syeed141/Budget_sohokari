@@ -39,16 +39,18 @@ export default function AIPage() {
           description="Ask practical budget questions and get personalized guidance based on your income, expenses, and savings context."
         />
 
-        <div className="mb-6 rounded-2xl bg-[#d9f1e4] px-4 py-3 text-sm font-medium text-[#214b3d] ring-1 ring-[#78b79d]">
+        <div className="typewriter-status mb-6 rounded-[2px] px-4 py-3 text-sm font-medium">
           AI chat integration is coming in the next update.
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
           <Card className="lg:col-span-2">
-            <CardContent className="flex h-[650px] flex-col">
-              <div className="border-b border-[#78b79d] pb-4">
-                <h2 className="text-lg font-semibold text-[#091413]">Chat</h2>
-                <p className="mt-1 text-sm text-[#285A48]">
+            <CardContent className="flex min-h-[520px] flex-col sm:h-[650px]">
+              <div className="typewriter-rule border-b pb-4">
+                <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
+                  Chat
+                </h2>
+                <p className="mt-1 text-sm text-[color:var(--secondary)]">
                   Coming soon in the next update.
                 </p>
               </div>
@@ -57,10 +59,10 @@ export default function AIPage() {
                 {sampleMessages.map((message) => (
                   <div
                     key={message.id}
-                    className={`max-w-[85%] rounded-3xl px-4 py-3 text-sm leading-6 ${
+                    className={`max-w-[85%] rounded-[2px] px-4 py-3 text-sm leading-6 ${
                       message.role === "user"
-                        ? "ml-auto bg-[#285A48] text-[#ecf8f1]"
-                        : "bg-[#ecf8f1] text-[#214b3d] ring-1 ring-[#78b79d]"
+                        ? "ml-auto border border-[color:var(--primary)] bg-[color:var(--primary)] text-[color:var(--surface)]"
+                        : "typewriter-panel text-[color:var(--foreground)]"
                     }`}
                   >
                     {message.content}
@@ -68,7 +70,7 @@ export default function AIPage() {
                 ))}
               </div>
 
-              <div className="border-t border-[#78b79d] pt-4">
+              <div className="typewriter-rule border-t pt-4">
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Input
                     placeholder="Ask something about your monthly budget..."
@@ -82,37 +84,47 @@ export default function AIPage() {
 
           <Card>
             <CardContent>
-              <h2 className="text-lg font-semibold text-[#091413]">
+              <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
                 AI Context Preview
               </h2>
-              <p className="mt-2 text-sm leading-6 text-[#285A48]">
+              <p className="mt-2 text-sm leading-6 text-[color:var(--secondary)]">
                 This side panel represents the kind of data the AI will later
                 use for more relevant advice.
               </p>
 
               <div className="mt-6 space-y-4">
-                <div className="rounded-2xl bg-[#ecf8f1] p-4 ring-1 ring-[#78b79d]">
-                  <p className="text-sm text-[#285A48]">Monthly Income</p>
-                  <p className="mt-2 text-xl font-bold text-[#091413]">
-                    ৳ 25,000
+                <div className="typewriter-panel rounded-[2px] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Monthly Income
+                  </p>
+                  <p className="mt-2 text-xl font-bold text-[color:var(--foreground)]">
+                    BDT 25,000
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-[#ecf8f1] p-4 ring-1 ring-[#78b79d]">
-                  <p className="text-sm text-[#285A48]">Spent So Far</p>
-                  <p className="mt-2 text-xl font-bold text-[#091413]">
-                    ৳ 12,400
+                <div className="typewriter-panel rounded-[2px] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Spent So Far
+                  </p>
+                  <p className="mt-2 text-xl font-bold text-[color:var(--foreground)]">
+                    BDT 12,400
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-[#ecf8f1] p-4 ring-1 ring-[#78b79d]">
-                  <p className="text-sm text-[#285A48]">Safe Daily Budget</p>
-                  <p className="mt-2 text-xl font-bold text-[#408A71]">৳ 420</p>
+                <div className="typewriter-panel rounded-[2px] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Safe Daily Budget
+                  </p>
+                  <p className="mt-2 text-xl font-bold text-[color:var(--primary)]">
+                    BDT 420
+                  </p>
                 </div>
 
-                <div className="rounded-2xl bg-[#091413] p-4 text-[#B0E4CC]">
-                  <p className="text-sm text-[#9ed5c0]">Current insight</p>
-                  <p className="mt-2 text-sm leading-6 text-[#B0E4CC]">
+                <div className="rounded-[2px] border border-[rgba(168,39,30,0.22)] bg-[rgba(168,39,30,0.08)] p-4">
+                  <p className="typewriter-label text-[color:var(--secondary)]">
+                    Current insight
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-[color:var(--foreground)]">
                     Food spending is the area where the assistant is likely to
                     advise adjustment.
                   </p>
@@ -125,4 +137,3 @@ export default function AIPage() {
     </main>
   );
 }
-

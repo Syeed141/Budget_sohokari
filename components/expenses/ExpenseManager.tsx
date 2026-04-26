@@ -172,7 +172,7 @@ export default function ExpenseManager({
 
   return (
     <div className="grid gap-6 xl:grid-cols-3">
-      <div className="xl:col-span-1">
+      <div className="min-w-0 xl:col-span-1">
         <ExpenseForm
           initialData={formInitialData}
           isEditing={Boolean(editingExpense)}
@@ -182,16 +182,18 @@ export default function ExpenseManager({
         />
 
         {error ? (
-          <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p className="typewriter-alert mt-4 rounded-[2px] px-4 py-3 text-sm">
             {error}
           </p>
         ) : null}
       </div>
 
-      <div className="xl:col-span-2">
+      <div className="min-w-0 xl:col-span-2">
         {isLoading ? (
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-            <p className="text-sm text-slate-600">Loading expenses...</p>
+          <div className="typewriter-card rounded-[2px] p-8">
+            <p className="text-sm text-[color:var(--secondary)]">
+              Loading expenses...
+            </p>
           </div>
         ) : (
           <ExpenseList

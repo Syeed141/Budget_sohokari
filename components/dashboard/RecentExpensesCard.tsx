@@ -18,16 +18,16 @@ export default function RecentExpensesCard({
   return (
     <Card>
       <CardContent>
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="typewriter-display text-lg text-[color:var(--foreground)]">
           Recent Expenses
         </h3>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-[color:var(--secondary)]">
           Your latest saved transactions.
         </p>
 
         {items.length === 0 ? (
-          <div className="mt-6 rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-            <p className="text-sm text-slate-600">
+          <div className="mt-6 rounded-[2px] border border-dashed border-[color:var(--border-soft)] bg-[rgba(245,234,200,0.65)] p-8 text-center">
+            <p className="text-sm text-[color:var(--secondary)]">
               No expenses yet. Add your first expense to start tracking.
             </p>
           </div>
@@ -36,16 +36,16 @@ export default function RecentExpensesCard({
             {items.map((expense) => (
               <div
                 key={expense._id}
-                className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-4 ring-1 ring-slate-200"
+                className="typewriter-panel flex items-center justify-between rounded-[2px] px-4 py-4"
               >
                 <div>
-                  <p className="font-medium text-slate-900">{expense.title}</p>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="font-medium text-[color:var(--foreground)]">{expense.title}</p>
+                  <p className="mt-1 text-sm text-[color:var(--secondary)]">
                     {expense.category} - {new Date(expense.date).toLocaleDateString()}
                   </p>
                 </div>
 
-                <p className="font-semibold text-slate-900">BDT {expense.amount}</p>
+                <p className="font-semibold text-[color:var(--foreground)]">BDT {expense.amount}</p>
               </div>
             ))}
           </div>

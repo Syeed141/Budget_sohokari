@@ -33,7 +33,7 @@ export default async function DashboardPage() {
           title={
             isDemo
               ? `See how ${user.name} tracks the month`
-              : `Welcome back, ${user.name} !`
+              : `Welcome back, ${user.name}!`
           }
           description={
             isDemo
@@ -43,7 +43,7 @@ export default async function DashboardPage() {
         />
 
         {isDemo ? (
-          <section className="mb-8 rounded-3xl border border-emerald-200 bg-emerald-50/80 p-5 text-sm text-emerald-950 shadow-sm">
+          <section className="typewriter-status mb-8 rounded-[2px] p-5 text-sm shadow-sm">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <p className="max-w-3xl leading-6">
                 You are viewing a sample account. Sign in or create an account to
@@ -53,13 +53,13 @@ export default async function DashboardPage() {
               <div className="flex gap-3">
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 font-semibold text-white transition hover:bg-slate-800"
+                  className="inline-flex items-center justify-center border border-[color:var(--primary)] bg-[color:var(--primary)] px-4 py-2 font-semibold uppercase tracking-[0.04em] text-[color:var(--surface)] transition hover:bg-[color:var(--primary-hover)]"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-900 transition hover:bg-slate-50"
+                  className="inline-flex items-center justify-center border border-[color:var(--border)] bg-[color:var(--surface)] px-4 py-2 font-semibold uppercase tracking-[0.04em] text-[color:var(--foreground)] transition hover:bg-[color:var(--surface-muted)]"
                 >
                   Create account
                 </Link>
@@ -78,7 +78,7 @@ export default async function DashboardPage() {
             value={`BDT ${totals.monthlyExpenses}`}
           />
           <SummaryCard
-            label="Current Month's remaining Balance"
+            label="Current Month's Remaining Balance"
             value={`BDT ${totals.remainingBalance}`}
             emphasis={totals.remainingBalance < 0 ? "negative" : "default"}
           />
@@ -106,28 +106,28 @@ export default async function DashboardPage() {
         <section className="mt-8 grid gap-6 lg:grid-cols-2">
           <RecentExpensesCard items={recentExpenses} />
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-slate-900">
+          <div className="typewriter-card rounded-[2px] p-6">
+            <h3 className="typewriter-display text-lg text-[color:var(--foreground)]">
               Monthly Planning Notes
             </h3>
 
             <div className="mt-6 space-y-4">
-              <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                <p className="text-sm text-slate-500">Profession</p>
-                <p className="mt-2 text-lg font-semibold text-slate-900">
+              <div className="typewriter-panel rounded-[2px] p-4">
+                <p className="typewriter-label text-[color:var(--secondary)]">Profession</p>
+                <p className="mt-2 text-lg font-semibold text-[color:var(--foreground)]">
                   {user.profession || "Not set yet"}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                <p className="text-sm text-slate-500">City</p>
-                <p className="mt-2 text-lg font-semibold text-slate-900">
+              <div className="typewriter-panel rounded-[2px] p-4">
+                <p className="typewriter-label text-[color:var(--secondary)]">City</p>
+                <p className="mt-2 text-lg font-semibold text-[color:var(--foreground)]">
                   {user.city || "Not set yet"}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-slate-900 p-5 text-white">
-                <p className="text-sm leading-6 text-slate-200">
+              <div className="rounded-[2px] border border-[rgba(168,39,30,0.22)] bg-[rgba(168,39,30,0.08)] p-5">
+                <p className="text-sm leading-6 text-[color:var(--foreground)]">
                   {totals.remainingBalance >= 0
                     ? "You still have room to manage the rest of this month carefully. Use your safe daily spending number as a guide."
                     : "You are currently spending above your monthly income. Reduce non-essential spending and review your highest categories first."}

@@ -10,13 +10,13 @@ export default function LoginPage() {
       <Container className="max-w-5xl">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="hidden lg:block">
-            <p className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+            <p className="typewriter-label inline-flex border border-[color:var(--border-soft)] bg-[rgba(245,234,200,0.9)] px-3 py-1 text-[color:var(--secondary)]">
               Welcome back
             </p>
-            <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900">
+            <h1 className="typewriter-display mt-6 text-4xl tracking-tight text-[color:var(--foreground)]">
               Continue tracking your financial progress
             </h1>
-            <p className="mt-4 max-w-lg text-base leading-7 text-slate-600">
+            <p className="mt-4 max-w-lg text-base leading-7 text-[color:var(--secondary)]">
               Log in to view your dashboard, manage expenses, track savings, and
               chat with your AI budgeting assistant.
             </p>
@@ -31,11 +31,11 @@ export default function LoginPage() {
 
               <LoginForm />
 
-              <p className="mt-6 text-sm text-slate-600">
+              <p className="mt-6 text-sm text-[color:var(--secondary)]">
                 Don&apos;t have an account?{" "}
                 <Link
                   href="/register"
-                  className="font-semibold text-slate-900 underline underline-offset-4"
+                  className="font-semibold text-[color:var(--primary)] underline underline-offset-4"
                 >
                   Register
                 </Link>

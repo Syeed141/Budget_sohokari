@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
+import { Courier_Prime, Special_Elite } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { ToastProvider } from "@/components/ui/ToastProvider";
+
+const displayFont = Special_Elite({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+
+const bodyFont = Courier_Prime({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "Budget Sohokari",
@@ -15,11 +29,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen antialiased">
+    <html
+      lang="en"
+      className={`${displayFont.variable} ${bodyFont.variable}`}
+    >
+      <body className={`${bodyFont.className} min-h-screen antialiased`}>
         <ToastProvider>
           <Navbar />
           {children}
+          <Footer />
         </ToastProvider>
       </body>
     </html>

@@ -101,10 +101,10 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
   return (
     <Card className="lg:col-span-2">
       <CardContent>
-        <h2 className="text-lg font-semibold text-slate-900">
+        <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
           Personal Information
         </h2>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-[color:var(--secondary)]">
           These values directly shape your dashboard insights.
         </p>
 
@@ -154,15 +154,15 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
             onChange={handleChange}
           />
 
-          <div className="md:col-span-2 space-y-3">
+          <div className="space-y-3 md:col-span-2">
             {error ? (
-              <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <p className="typewriter-alert rounded-[2px] px-4 py-3 text-sm">
                 {error}
               </p>
             ) : null}
 
             {success ? (
-              <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              <p className="typewriter-status rounded-[2px] px-4 py-3 text-sm">
                 {success}
               </p>
             ) : null}
@@ -176,4 +176,3 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
     </Card>
   );
 }
-

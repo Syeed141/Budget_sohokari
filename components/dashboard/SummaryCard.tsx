@@ -15,19 +15,19 @@ export default function SummaryCard({
 }: SummaryCardProps) {
   const valueClassName =
     emphasis === "positive"
-      ? "text-emerald-600"
+      ? "text-[color:var(--primary)]"
       : emphasis === "negative"
       ? "text-red-600"
-      : "text-slate-900";
+      : "text-[color:var(--foreground)]";
 
   return (
     <Card>
       <CardContent>
-        <p className="text-sm text-slate-500">{label}</p>
-        <h2 className={`mt-3 text-3xl font-bold tracking-tight ${valueClassName}`}>
+        <p className="typewriter-label text-[color:var(--secondary)]">{label}</p>
+        <h2 className={`typewriter-display mt-3 text-3xl tracking-tight ${valueClassName}`}>
           {value}
         </h2>
-        {hint ? <p className="mt-2 text-sm text-slate-500">{hint}</p> : null}
+        {hint ? <p className="mt-2 text-sm text-[color:var(--secondary)]">{hint}</p> : null}
       </CardContent>
     </Card>
   );

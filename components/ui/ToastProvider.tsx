@@ -24,14 +24,14 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 function getToastClasses(type: ToastType) {
   if (type === "success") {
-    return "border-[#408A71] bg-[#d9f1e4] text-[#143026]";
+    return "border-[rgba(107,91,62,0.34)] bg-[rgba(245,234,200,0.98)] text-[color:var(--foreground)]";
   }
 
   if (type === "error") {
-    return "border-red-300 bg-red-50 text-red-700";
+    return "border-[rgba(168,39,30,0.36)] bg-[rgba(168,39,30,0.08)] text-[color:var(--foreground)]";
   }
 
-  return "border-[#78b79d] bg-[#ecf8f1] text-[#214b3d]";
+  return "border-[rgba(107,91,62,0.3)] bg-[rgba(245,234,200,0.98)] text-[color:var(--foreground)]";
 }
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
@@ -53,11 +53,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={value}>
       {children}
 
-      <div className="pointer-events-none fixed right-4 top-20 z-[80] flex w-full max-w-sm flex-col gap-3">
+      <div className="pointer-events-none fixed left-4 right-4 top-20 z-[80] flex flex-col gap-3 sm:left-auto sm:max-w-sm">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto rounded-2xl border px-4 py-3 text-sm font-medium shadow-lg ${getToastClasses(
+            className={`pointer-events-auto rounded-[2px] border px-4 py-3 text-sm font-medium shadow-lg ${getToastClasses(
               toast.type
             )}`}
           >

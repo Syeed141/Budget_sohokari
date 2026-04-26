@@ -103,25 +103,25 @@ export default function ExpenseForm({
   }
 
   return (
-    <Card className="overflow-hidden border border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden">
       <CardContent className="p-0">
-        <div className="border-b border-slate-200 bg-slate-50/80 px-6 py-5 sm:px-8">
-          <h2 className="text-xl font-semibold text-slate-900">
+        <div className="typewriter-grid border-b border-[color:var(--border-soft)] px-4 py-5 sm:px-8">
+          <h2 className="typewriter-display text-xl text-[color:var(--foreground)]">
             {isEditing ? "Edit Expense" : "Add Expense"}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-[color:var(--secondary)]">
             {isEditing
               ? "Update your saved expense details."
               : "Record a daily or fixed cost in a clean, structured way."}
           </p>
           {isDemo ? (
-            <p className="mt-2 text-sm text-emerald-700">
+            <p className="mt-2 text-sm text-[color:var(--primary)]">
               Demo preview mode is read-only. Sign in to add or edit expenses.
             </p>
           ) : null}
         </div>
 
-        <form className="space-y-6 px-6 py-6 sm:px-8" onSubmit={handleSubmit}>
+        <form className="space-y-6 px-4 py-6 sm:px-8" onSubmit={handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2">
             <Input
               label="Title"
@@ -159,7 +159,7 @@ export default function ExpenseForm({
             <div className="space-y-2">
               <label
                 htmlFor="category"
-                className="text-sm font-medium text-slate-700"
+                className="typewriter-label text-[color:var(--secondary)]"
               >
                 Category
               </label>
@@ -170,10 +170,10 @@ export default function ExpenseForm({
                 onChange={handleChange}
                 required
                 disabled={isDemo}
-                className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:ring-2 ${
+                className={`w-full min-w-0 rounded-none border bg-[rgba(245,234,200,0.92)] px-4 py-3 text-sm text-[color:var(--foreground)] outline-none transition focus:ring-2 ${
                   fieldErrors.category
                     ? "border-red-400 focus:border-red-500 focus:ring-red-200"
-                    : "border-slate-200 focus:border-slate-400 focus:ring-slate-200"
+                    : "border-[color:var(--border-soft)] focus:border-[color:var(--primary)] focus:ring-[rgba(168,39,30,0.18)]"
                 }`}
               >
                 <option value="">Select</option>
@@ -216,24 +216,26 @@ export default function ExpenseForm({
           {fieldErrors.note ? (
             <p className="-mt-4 text-xs text-red-600">{fieldErrors.note}</p>
           ) : (
-            <p className="-mt-4 text-xs text-slate-500">Up to 300 characters.</p>
+            <p className="-mt-4 text-xs text-[color:var(--secondary)]">
+              Up to 300 characters.
+            </p>
           )}
 
-          <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition hover:border-slate-300 hover:bg-slate-100/70">
+          <label className="typewriter-panel flex cursor-pointer items-start gap-4 rounded-[2px] px-4 py-4 transition hover:border-[color:var(--border)] hover:bg-[rgba(245,234,200,0.95)]">
             <input
               type="checkbox"
               name="isFixed"
               checked={formData.isFixed}
               onChange={handleChange}
               disabled={isDemo}
-              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-300"
+              className="mt-0.5 h-4 w-4 rounded-none border-[color:var(--border)] text-[color:var(--primary)] focus:ring-[rgba(168,39,30,0.18)]"
             />
 
             <div>
-              <p className="text-sm font-medium text-slate-800">
+              <p className="text-sm font-medium text-[color:var(--foreground)]">
                 Fixed monthly expense
               </p>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[color:var(--secondary)]">
                 Use this for recurring costs like rent, internet, or utility
                 bills.
               </p>
@@ -259,7 +261,7 @@ export default function ExpenseForm({
                 variant="secondary"
                 size="lg"
                 onClick={onCancelEdit}
-                className="sm:min-w-[140px]"
+                className="w-full sm:min-w-[140px] sm:w-auto"
               >
                 Cancel
               </Button>

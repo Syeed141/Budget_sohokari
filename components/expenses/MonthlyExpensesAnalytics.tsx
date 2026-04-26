@@ -100,32 +100,32 @@ export default function MonthlyExpensesAnalytics({
 
   return (
     <div className="space-y-6">
-      <Card className="p-6">
+      <Card className="p-4 sm:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="typewriter-display text-lg text-[color:var(--foreground)]">
               Monthly Expense Analytics
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-[color:var(--secondary)]">
               Review day-by-day spending patterns and budgeting signals for a full month.
             </p>
             {isDemo ? (
-              <p className="mt-2 text-sm text-emerald-700">
+              <p className="mt-2 text-sm text-[color:var(--primary)]">
                 Demo analytics are shown for a sample month. Sign in to inspect your own data.
               </p>
             ) : null}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+            <div className="w-full sm:w-auto">
+              <label className="typewriter-label mb-1 block text-[color:var(--secondary)]">
                 Month
               </label>
               <select
                 value={month}
                 onChange={(e) => setMonth(Number(e.target.value))}
                 disabled={isDemo}
-                className="min-w-[170px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300 disabled:cursor-not-allowed disabled:bg-slate-50"
+                className="w-full rounded-none border border-[color:var(--border-soft)] bg-[rgba(245,234,200,0.92)] px-3 py-2 text-sm text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] sm:min-w-[170px] disabled:cursor-not-allowed disabled:bg-[rgba(245,234,200,0.7)]"
               >
                 {monthOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -135,8 +135,8 @@ export default function MonthlyExpensesAnalytics({
               </select>
             </div>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+            <div className="w-full sm:w-auto">
+              <label className="typewriter-label mb-1 block text-[color:var(--secondary)]">
                 Year
               </label>
               <input
@@ -144,7 +144,7 @@ export default function MonthlyExpensesAnalytics({
                 value={year}
                 onChange={(e) => setYear(Number(e.target.value))}
                 disabled={isDemo}
-                className="min-w-[130px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-300 disabled:cursor-not-allowed disabled:bg-slate-50"
+                className="w-full rounded-none border border-[color:var(--border-soft)] bg-[rgba(245,234,200,0.92)] px-3 py-2 text-sm text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--primary)] sm:min-w-[130px] disabled:cursor-not-allowed disabled:bg-[rgba(245,234,200,0.7)]"
               />
             </div>
           </div>
@@ -152,13 +152,13 @@ export default function MonthlyExpensesAnalytics({
       </Card>
 
       {loading ? (
-        <Card className="p-6">
-          <p className="text-sm text-slate-500">
+        <Card className="p-4 sm:p-6">
+          <p className="text-sm text-[color:var(--secondary)]">
             Loading monthly expense analytics...
           </p>
         </Card>
       ) : error ? (
-        <Card className="p-6">
+        <Card className="p-4 sm:p-6">
           <p className="text-sm font-medium text-red-600">{error}</p>
         </Card>
       ) : data ? (
@@ -176,9 +176,9 @@ export default function MonthlyExpensesAnalytics({
 
           <MonthlyDailyBreakdown groups={data.dailyGroups} />
 
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-stretch gap-2 sm:items-end">
             {isDemo ? (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[color:var(--secondary)]">
                 Download the sample PDF report from this preview.
               </p>
             ) : null}
