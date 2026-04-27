@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useToast } from "@/components/ui/ToastProvider";
-import { validatePersonName } from "@/components/lib/user-validation";
+import {
+  validatePersonName,
+  validateProfileFields,
+} from "@/components/lib/user-validation";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -15,10 +18,25 @@ export default function RegisterForm() {
     name: "",
     email: "",
     password: "",
+    city: "Dhaka",
+    profession: "",
+    monthlyIncome: "",
+    monthlySavingsGoal: "",
   });
 
   const [error, setError] = useState("");
-  const [nameError, setNameError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<
+      Record<
+        | "name"
+        | "city"
+        | "profession"
+        | "monthlyIncome"
+        | "monthlySavingsGoal",
+        string
+      >
+    >
+  >({});
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,20 +48,45 @@ export default function RegisterForm() {
       [name]: value,
     }));
 
-    if (name === "name" && nameError) {
-      setNameError("");
+    if (name in fieldErrors) {
+      setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
-    setNameError("");
+    setFieldErrors({});
     setSuccess("");
 
     const validatedName = validatePersonName(formData.name);
     if (!validatedName.valid) {
-      setNameError(validatedName.message || "Invalid name");
+      setFieldErrors({ name: validatedName.message || "Invalid name" });
+      return;
+    }
+
+    const validatedProfile = validateProfileFields({
+      city: formData.city,
+      profession: formData.profession,
+      monthlyIncome: formData.monthlyIncome,
+      monthlySavingsGoal: formData.monthlySavingsGoal,
+    });
+
+    if (!validatedProfile.valid) {
+      const message = validatedProfile.message || "Invalid profile information";
+
+      if (message.toLowerCase().includes("city")) {
+        setFieldErrors({ city: message });
+      } else if (message.toLowerCase().includes("profession")) {
+        setFieldErrors({ profession: message });
+      } else if (message.toLowerCase().includes("monthly income")) {
+        setFieldErrors({ monthlyIncome: message });
+      } else if (message.toLowerCase().includes("savings goal")) {
+        setFieldErrors({ monthlySavingsGoal: message });
+      } else {
+        setError(message);
+      }
+
       return;
     }
 
@@ -58,6 +101,10 @@ export default function RegisterForm() {
         body: JSON.stringify({
           ...formData,
           name: validatedName.value,
+          city: validatedProfile.value.city,
+          profession: validatedProfile.value.profession,
+          monthlyIncome: validatedProfile.value.monthlyIncome,
+          monthlySavingsGoal: validatedProfile.value.monthlySavingsGoal,
         }),
       });
 
@@ -66,7 +113,6 @@ export default function RegisterForm() {
       if (!response.ok) {
         const message = result.message || "Registration failed";
         setError(message);
-        pushToast(message, "error");
         return;
       }
 
@@ -77,7 +123,6 @@ export default function RegisterForm() {
     } catch {
       const message = "Something went wrong. Please try again.";
       setError(message);
-      pushToast(message, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -93,8 +138,32 @@ export default function RegisterForm() {
         value={formData.name}
         onChange={handleChange}
         required
-        className={nameError ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
-        helperText={nameError || "Letters and spaces only."}
+        className={fieldErrors.name ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+        helperText={fieldErrors.name || "Letters and spaces only."}
+      />
+
+      <Input
+        label="Profession"
+        name="profession"
+        type="text"
+        placeholder="Junior Executive"
+        value={formData.profession}
+        onChange={handleChange}
+        required
+        className={fieldErrors.profession ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+        helperText={fieldErrors.profession}
+      />
+
+      <Input
+        label="City"
+        name="city"
+        type="text"
+        placeholder="Dhaka"
+        value={formData.city}
+        onChange={handleChange}
+        required
+        className={fieldErrors.city ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+        helperText={fieldErrors.city}
       />
 
       <Input
@@ -114,6 +183,30 @@ export default function RegisterForm() {
         helperText="Use at least 8 characters."
         value={formData.password}
         onChange={handleChange}
+      />
+
+      <Input
+        label="Monthly Income"
+        name="monthlyIncome"
+        type="number"
+        placeholder="25000"
+        value={formData.monthlyIncome}
+        onChange={handleChange}
+        required
+        className={fieldErrors.monthlyIncome ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+        helperText={fieldErrors.monthlyIncome}
+      />
+
+      <Input
+        label="Savings Goal"
+        name="monthlySavingsGoal"
+        type="number"
+        placeholder="5000"
+        value={formData.monthlySavingsGoal}
+        onChange={handleChange}
+        required
+        className={fieldErrors.monthlySavingsGoal ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""}
+        helperText={fieldErrors.monthlySavingsGoal}
       />
 
       {error ? (

@@ -23,7 +23,7 @@ export default async function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[color:var(--border-soft)] bg-[color:var(--surface)]">
       <Container className="py-3">
-        <div className="flex min-h-10 flex-wrap items-center justify-between gap-3">
+        <div className="flex min-h-10 items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-4 sm:gap-8">
             <Link
               href="/"
@@ -47,25 +47,27 @@ export default async function Navbar() {
             ) : null}
           </div>
 
-          <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-            <MobileNavMenu links={visibleLinks} />
+          <div className="flex items-center justify-end gap-2 sm:gap-3">
+            <MobileNavMenu links={visibleLinks} sessionName={session?.name} />
 
             {session ? (
               <>
                 <span className="hidden text-sm text-[color:var(--secondary)] sm:inline">
                   {session.name}
                 </span>
-                <LogoutButton />
+                <div className="hidden md:block">
+                  <LogoutButton />
+                </div>
               </>
             ) : (
-              <>
+              <div className="hidden md:flex md:items-center md:gap-3">
                 <Button href="/login" variant="ghost" size="sm">
                   Login
                 </Button>
                 <Button href="/register" size="sm">
                   Register
                 </Button>
-              </>
+              </div>
             )}
           </div>
         </div>

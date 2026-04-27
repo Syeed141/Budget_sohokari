@@ -5,6 +5,7 @@ import SummaryCard from "@/components/dashboard/SummaryCard";
 import SavingsProgressCard from "@/components/dashboard/SavingsProgressCard";
 import RecentExpensesCard from "@/components/dashboard/RecentExpensesCard";
 import CategoryBreakdownCard from "@/components/dashboard/CategoryBreakdownCard";
+import SpendingCalendarCard from "@/components/dashboard/SpendingCalendarCard";
 import { getSessionFromCookies } from "@/components/lib/auth";
 import {
   getDashboardData,
@@ -23,6 +24,7 @@ export default async function DashboardPage() {
     totals,
     categoryBreakdown,
     recentExpenses,
+    spendingCalendar,
   } = dashboardData;
 
   return (
@@ -103,8 +105,15 @@ export default async function DashboardPage() {
           </div>
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-2">
+        <section className="mt-8 grid gap-6 xl:grid-cols-3">
           <RecentExpensesCard items={recentExpenses} />
+
+          <SpendingCalendarCard
+            monthLabel={spendingCalendar.monthLabel}
+            weekdayLabels={spendingCalendar.weekdayLabels}
+            highestDailySpend={spendingCalendar.highestDailySpend}
+            days={spendingCalendar.days}
+          />
 
           <div className="typewriter-card rounded-[2px] p-6">
             <h3 className="typewriter-display text-lg text-[color:var(--foreground)]">

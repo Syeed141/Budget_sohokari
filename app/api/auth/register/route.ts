@@ -3,20 +3,40 @@ import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/components/lib/db";
 import User from "@/components/models/User";
 import { createSessionToken, setSessionCookie } from "@/components/lib/auth";
-import { validatePersonName } from "@/components/lib/user-validation";
+import {
+  validatePersonName,
+  validateProfileFields,
+} from "@/components/lib/user-validation";
 
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
 
     const body = await request.json();
-    const { name, email, password } = body;
+    const {
+      name,
+      email,
+      password,
+      city,
+      profession,
+      monthlyIncome,
+      monthlySavingsGoal,
+    } = body;
 
-    if (!name || !email || !password) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      city === undefined ||
+      profession === undefined ||
+      monthlyIncome === undefined ||
+      monthlySavingsGoal === undefined
+    ) {
       return NextResponse.json(
         {
           success: false,
-          message: "Name, email, and password are required",
+          message:
+            "Name, email, password, city, profession, monthly income, and savings goal are required",
         },
         { status: 400 }
       );
@@ -43,6 +63,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const validatedProfile = validateProfileFields({
+      city,
+      profession,
+      monthlyIncome,
+      monthlySavingsGoal,
+    });
+
+    if (!validatedProfile.valid) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: validatedProfile.message || "Invalid profile information",
+        },
+        { status: 400 }
+      );
+    }
+
     const normalizedEmail = email.toLowerCase().trim();
 
     const existingUser = await User.findOne({ email: normalizedEmail });
@@ -63,6 +100,10 @@ export async function POST(request: NextRequest) {
       name: validatedName.value,
       email: normalizedEmail,
       passwordHash,
+      city: validatedProfile.value.city,
+      profession: validatedProfile.value.profession,
+      monthlyIncome: validatedProfile.value.monthlyIncome,
+      monthlySavingsGoal: validatedProfile.value.monthlySavingsGoal,
     });
 
     const token = await createSessionToken({

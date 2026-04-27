@@ -22,7 +22,7 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <Card className="mx-auto w-full max-w-md">
+          <Card className="mx-auto w-full max-w-xl">
             <CardContent className="p-8">
               <PageHeader
                 title="Register"

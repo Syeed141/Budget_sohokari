@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/components/lib/db";
 import { getSessionFromCookies } from "@/components/lib/auth";
 import User from "@/components/models/User";
-import { validatePersonName } from "@/components/lib/user-validation";
+import {
+  validateCity,
+  validateNonNegativeNumber,
+  validatePersonName,
+  validateProfession,
+} from "@/components/lib/user-validation";
 
 export async function GET() {
   try {
@@ -103,39 +108,95 @@ export async function PATCH(request: NextRequest) {
 
       user.name = validatedName.value;
     }
-    if (city !== undefined) user.city = String(city).trim();
-    if (profession !== undefined) user.profession = String(profession).trim();
+    if (city !== undefined) {
+      const validatedCity = validateCity(city);
 
-    if (monthlyIncome !== undefined) {
-      const parsedIncome = Number(monthlyIncome);
-
-      if (Number.isNaN(parsedIncome) || parsedIncome < 0) {
+      if (!validatedCity.valid) {
         return NextResponse.json(
           {
             success: false,
-            message: "Monthly income must be a valid non-negative number",
+            message: validatedCity.message || "Invalid city",
           },
           { status: 400 }
         );
       }
 
-      user.monthlyIncome = parsedIncome;
+      user.city = validatedCity.value;
+    }
+
+    if (profession !== undefined) {
+      const validatedProfession = validateProfession(profession);
+
+      if (!validatedProfession.valid) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: validatedProfession.message || "Invalid profession",
+          },
+          { status: 400 }
+        );
+      }
+
+      user.profession = validatedProfession.value;
+    }
+
+    if (monthlyIncome !== undefined) {
+      const validatedIncome = validateNonNegativeNumber(
+        monthlyIncome,
+        "Monthly income"
+      );
+
+      if (!validatedIncome.valid) {
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              validatedIncome.message ||
+              "Monthly income must be a valid non-negative number",
+          },
+          { status: 400 }
+        );
+      }
+
+      user.monthlyIncome = validatedIncome.value;
     }
 
     if (monthlySavingsGoal !== undefined) {
-      const parsedGoal = Number(monthlySavingsGoal);
+      const validatedGoal = validateNonNegativeNumber(
+        monthlySavingsGoal,
+        "Savings goal"
+      );
 
-      if (Number.isNaN(parsedGoal) || parsedGoal < 0) {
+      if (!validatedGoal.valid) {
         return NextResponse.json(
           {
             success: false,
-            message: "Savings goal must be a valid non-negative number",
+            message:
+              validatedGoal.message ||
+              "Savings goal must be a valid non-negative number",
           },
           { status: 400 }
         );
       }
 
-      user.monthlySavingsGoal = parsedGoal;
+      user.monthlySavingsGoal = validatedGoal.value;
+    }
+
+    const nextIncome =
+      monthlyIncome !== undefined ? user.monthlyIncome ?? 0 : user.monthlyIncome ?? 0;
+    const nextSavingsGoal =
+      monthlySavingsGoal !== undefined
+        ? user.monthlySavingsGoal ?? 0
+        : user.monthlySavingsGoal ?? 0;
+
+    if (nextSavingsGoal > nextIncome) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Savings goal cannot be greater than monthly income",
+        },
+        { status: 400 }
+      );
     }
 
     await user.save();

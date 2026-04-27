@@ -2,6 +2,15 @@ import { connectToDatabase } from "@/components/lib/db";
 import Expense from "@/components/models/Expense";
 import User from "@/components/models/User";
 
+type SpendingCalendarCell = {
+  key: string;
+  isoDate: string | null;
+  dayNumber: number | null;
+  total: number | null;
+  isToday: boolean;
+  intensity: number;
+};
+
 export type DashboardSummary = {
   user: {
     id: string;
@@ -34,11 +43,22 @@ export type DashboardSummary = {
     isFixed: boolean;
     note?: string;
   }>;
+  spendingCalendar: {
+    monthLabel: string;
+    weekdayLabels: string[];
+    highestDailySpend: number;
+    days: SpendingCalendarCell[];
+  };
 };
 
 function formatDemoDate(day: number) {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), day, 12).toISOString();
+}
+
+function getDemoSnapshotDate(day: number) {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), day, 12);
 }
 
 function getMonthRange(date = new Date()) {
@@ -55,6 +75,61 @@ function getRemainingDaysInMonth(date = new Date()) {
 
 function roundToTwo(num: number) {
   return Math.round(num * 100) / 100;
+}
+
+function buildSpendingCalendar(
+  dailyTotals: Map<number, number>,
+  date = new Date()
+): DashboardSummary["spendingCalendar"] {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const leadingBlanks = firstDay.getDay();
+  const highestDailySpend = Math.max(...dailyTotals.values(), 0);
+  const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const days: SpendingCalendarCell[] = [];
+
+  for (let index = 0; index < leadingBlanks; index += 1) {
+    days.push({
+      key: `blank-${index}`,
+      isoDate: null,
+      dayNumber: null,
+      total: null,
+      isToday: false,
+      intensity: 0,
+    });
+  }
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const cellDate = new Date(year, month, day);
+    const total = dailyTotals.get(day) || 0;
+    const isToday =
+      cellDate.getFullYear() === date.getFullYear() &&
+      cellDate.getMonth() === date.getMonth() &&
+      cellDate.getDate() === date.getDate();
+    const intensity =
+      highestDailySpend > 0 && total > 0 ? Math.max(total / highestDailySpend, 0.15) : 0;
+
+    days.push({
+      key: cellDate.toISOString(),
+      isoDate: cellDate.toISOString(),
+      dayNumber: day,
+      total: roundToTwo(total),
+      isToday,
+      intensity: roundToTwo(intensity),
+    });
+  }
+
+  return {
+    monthLabel: new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      year: "numeric",
+    }).format(date),
+    weekdayLabels,
+    highestDailySpend: roundToTwo(highestDailySpend),
+    days,
+  };
 }
 
 export async function getDashboardData(userId: string): Promise<DashboardSummary> {
@@ -102,10 +177,14 @@ export async function getDashboardData(userId: string): Promise<DashboardSummary
   const safeDailySpend = remainingSpendableBudget / remainingDays;
 
   const categoryMap = new Map<string, number>();
+  const dailyTotalsMap = new Map<number, number>();
 
   for (const expense of monthlyExpenses) {
     const current = categoryMap.get(expense.category) || 0;
     categoryMap.set(expense.category, current + expense.amount);
+    const expenseDay = new Date(expense.date).getDate();
+    const currentDayTotal = dailyTotalsMap.get(expenseDay) || 0;
+    dailyTotalsMap.set(expenseDay, currentDayTotal + expense.amount);
   }
 
   const categoryBreakdown = Array.from(categoryMap.entries())
@@ -149,15 +228,17 @@ export async function getDashboardData(userId: string): Promise<DashboardSummary
       isFixed: expense.isFixed,
       note: expense.note || "",
     })),
+    spendingCalendar: buildSpendingCalendar(dailyTotalsMap, now),
   };
 }
 
 export function getDemoDashboardData(): DashboardSummary {
+  const snapshotDate = getDemoSnapshotDate(10);
   const monthlyIncome = 85000;
   const savingsGoal = 15000;
   const monthlyExpenses = 46850;
   const remainingBalance = monthlyIncome - monthlyExpenses;
-  const remainingDays = getRemainingDaysInMonth();
+  const remainingDays = getRemainingDaysInMonth(snapshotDate);
   const monthlySpendableBudget = monthlyIncome - savingsGoal;
   const remainingSpendableBudget = monthlySpendableBudget - monthlyExpenses;
   const safeDailySpend = remainingSpendableBudget / remainingDays;
@@ -166,6 +247,18 @@ export function getDemoDashboardData(): DashboardSummary {
     savingsGoal > 0
       ? Math.min(Math.max((actualSavings / savingsGoal) * 100, 0), 100)
       : 0;
+  const demoDailyTotals = new Map<number, number>([
+    [2, 18000],
+    [7, 3450],
+    [8, 4600],
+    [9, 4050],
+    [12, 3100],
+    [16, 3900],
+    [19, 2400],
+    [22, 1750],
+    [24, 1600],
+    [27, 4000],
+  ]);
 
   return {
     user: {
@@ -242,5 +335,6 @@ export function getDemoDashboardData(): DashboardSummary {
         note: "Monthly refill",
       },
     ],
+    spendingCalendar: buildSpendingCalendar(demoDailyTotals, snapshotDate),
   };
 }

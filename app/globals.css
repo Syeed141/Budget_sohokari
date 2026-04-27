@@ -99,25 +99,6 @@ h6 {
   animation: driftSoft 10s ease-in-out infinite;
 }
 
-.home-scroll section {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-.home-scroll section.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-scroll section {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
 .typewriter-display {
   font-family: var(--font-display), "Special Elite", serif;
 }
